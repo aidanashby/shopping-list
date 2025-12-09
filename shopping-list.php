@@ -1,5 +1,23 @@
-<?php
-/**
+ * Version: 0.6.1
+if (!defined('SHOPPING_LIST_VERSION')) {
+    define('SHOPPING_LIST_VERSION', '0.6.1');
+}
+
+if (!defined('SHOPPING_LIST_PLUGIN_FILE')) {
+    define('SHOPPING_LIST_PLUGIN_FILE', __FILE__);
+}
+
+if (!defined('SHOPPING_LIST_GITHUB_REPO')) {
+    define('SHOPPING_LIST_GITHUB_REPO', 'aidanashby/shopping-list');
+}
+
+if (!defined('SHOPPING_LIST_PLUGIN_DIR')) {
+    define('SHOPPING_LIST_PLUGIN_DIR', plugin_dir_path(__FILE__));
+}
+
+if (!defined('SHOPPING_LIST_PLUGIN_URL')) {
+    define('SHOPPING_LIST_PLUGIN_URL', plugin_dir_url(__FILE__));
+}
  * Plugin Name: Shopping List
  * Description: Manages randomised item displays with administrative controls and weekly automated regeneration.
  * Version: 0.5.3
