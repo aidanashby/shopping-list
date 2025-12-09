@@ -14,9 +14,7 @@ class Shopping_List_Updater {
         $this->version = $version;
         $this->repository = $repository;
         $this->plugin_basename = plugin_basename($plugin_file);
-
-        $dirname = dirname($this->plugin_basename);
-        $this->slug = $dirname === '.' ? basename($this->plugin_basename, '.php') : $dirname;
+        $this->slug = dirname($this->plugin_basename);
     }
 
     public function init_hooks() {
@@ -32,7 +30,7 @@ class Shopping_List_Updater {
 
         $release = $this->get_latest_release();
 
-        if (!$release || empty($release['version']) || empty($release['zipball']) || version_compare($release['version'], $this->version, '<=')) {
+        if (!$release || empty($release['version']) || version_compare($release['version'], $this->version, '<=')) {
             return $transient;
         }
 
@@ -57,10 +55,6 @@ class Shopping_List_Updater {
         }
 
         $release = $this->get_latest_release();
-
-        if (!$release) {
-            return new WP_Error('shopping_list_updater', __('Unable to retrieve plugin information at this time.', 'shopping-list'));
-        }
 
         if (!function_exists('get_file_data')) {
             require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -128,8 +122,7 @@ class Shopping_List_Updater {
         $api_url = sprintf('https://api.github.com/repos/%s/releases/latest', $this->repository);
         $response = wp_remote_get($api_url, array(
             'headers' => array(
-                'Accept' => 'application/vnd.github+json',
-                'User-Agent' => 'shopping-list-plugin'
+                'Accept' => 'application/vnd.github+json'
             )
         ));
 
