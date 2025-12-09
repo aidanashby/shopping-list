@@ -1,4 +1,7 @@
-<?php
+ * Version: 0.6.0
+define('SHOPPING_LIST_VERSION', '0.6.0');
+define('SHOPPING_LIST_PLUGIN_FILE', __FILE__);
+define('SHOPPING_LIST_GITHUB_REPO', 'aidanashby/shopping-list');
 /**
  * Plugin Name: Shopping List
  * Description: Manages randomised item displays with administrative controls and weekly automated regeneration.

@@ -33,20 +33,36 @@ class Shopping_List_Database {
     public static function get_always_include_items() {
         return get_option('shopping_list_always_include', array_fill(0, 8, ''));
     }
-
-    public static function get_not_needed_items() {
-        return get_option('shopping_list_not_needed', array_fill(0, 8, ''));
-    }
-
-    public static function get_random_items() {
-        $default = array();
-        for ($i = 0; $i < 40; $i++) {
-            $default[$i] = array_fill(0, 4, '');
-        }
-        return get_option('shopping_list_random_items', $default);
-    }
-
-    public static function get_current_selection() {
+        $not_needed_filtered = array_filter($not_needed, function($item) {
+            return !empty(trim($item));
+        });
+        $not_needed_lowercase = array_map('strtolower', array_map('trim', $not_needed_filtered));
+
+        // Filter out empty always include items and exclude not needed items
+        $always_include_filtered = array_filter($always_include, function($item) use ($not_needed_lowercase) {
+            $item_trimmed = trim($item);
+            return !empty($item_trimmed) && !in_array(strtolower($item_trimmed), $not_needed_lowercase);
+        });
+
+        $always_include_lowercase = array_map('strtolower', array_map('trim', $always_include_filtered));
+
+        $selection = array_values($always_include_filtered);
+        $remaining_slots = 8 - count($selection);
+
+        if ($remaining_slots > 0) {
+            // Get random items from each row, excluding not needed items
+            $available_random = array();
+            foreach ($random_items as $row) {
+                $row_items = array_filter($row, function($item) use ($not_needed_lowercase, $always_include_lowercase) {
+                    $item_trimmed = trim($item);
+                    $item_lower = strtolower($item_trimmed);
+                    return !empty($item_trimmed) && !in_array($item_lower, $not_needed_lowercase) && !in_array($item_lower, $always_include_lowercase);
+                });
+                if (!empty($row_items)) {
+                    $available_random[] = $row_items[array_rand($row_items)];
+                }
+            }
+
         return get_option('shopping_list_current_selection', array());
     }
 
