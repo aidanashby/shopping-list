@@ -6,10 +6,10 @@ This milestone resolves all known bugs and code quality concerns in the Shopping
 
 ## Phases
 
-- [ ] **Phase 1: Database Integrity** — Audit and fix class-shopping-list-database.php; resolve always-include duplicate bug
-- [ ] **Phase 2: Bootstrap Integrity** — Fix duplicate constructor, version mismatch, delete orphan cron file
-- [ ] **Phase 3: Admin Quality** — Scope admin assets, harden form submission, add over-capacity notice
-- [ ] **Phase 4: Code Quality** — Named constants for slot counts, final lint pass
+- [x] **Phase 1: Database Integrity** — Audit and fix class-shopping-list-database.php; resolve always-include duplicate bug
+- [x] **Phase 2: Bootstrap Integrity** — Fix duplicate constructor, version mismatch, delete orphan cron file
+- [x] **Phase 3: Admin Quality** — Scope admin assets, harden form submission, add over-capacity notice
+- [x] **Phase 4: Code Quality** — Named constants for slot counts, final lint pass
 
 ## Phase Details
 
@@ -25,9 +25,9 @@ This milestone resolves all known bugs and code quality concerns in the Shopping
   5. `generate_random_selection()` has exactly one implementation
 
 Plans:
-- [ ] 01-01: Audit — run `php -l`, map actual method presence and file structure, document what is orphaned and what is missing
-- [ ] 01-02: Fix — remove orphaned code, add any missing getter methods, ensure single correct `generate_random_selection()` with always-include exclusion
-- [ ] 01-03: Verify — `php -l` clean, manual test confirms no duplicate items in `[shop_list]` output
+- [x] 01-01: Audit — run `php -l`, map actual method presence and file structure, document what is orphaned and what is missing
+- [x] 01-02: Fix — remove orphaned code, add any missing getter methods, ensure single correct `generate_random_selection()` with always-include exclusion
+- [x] 01-03: Verify — `php -l` clean, manual test confirms no duplicate items in `[shop_list]` output
 
 ### Phase 2: Bootstrap Integrity
 **Goal**: Fix silent failures in the plugin bootstrap — dead updater, version constant collision, and orphan cron file confusion
@@ -41,9 +41,9 @@ Plans:
   5. `php -l` passes on all modified files
 
 Plans:
-- [ ] 02-01: Fix duplicate `__construct` in `class-shopping-list.php` — merge into single constructor calling all five `define_*` methods; remove duplicate `load_dependencies()` and `define_cron_hooks()` definitions
-- [ ] 02-02: Fix version mismatch in `shopping-list.php` — remove the three premature `define()` calls before the plugin header block; set `SHOPPING_LIST_VERSION`, `SHOPPING_LIST_PLUGIN_FILE`, `SHOPPING_LIST_GITHUB_REPO` after the header; align version to `0.6.0` in both header and constant
-- [ ] 02-03: Delete `includes/includesclass-shopping-list-cron.php`; verify canonical `includes/class-shopping-list-cron.php` schedules Monday 6 AM
+- [x] 02-01: Fix duplicate `__construct` in `class-shopping-list.php` — merge into single constructor calling all five `define_*` methods; remove duplicate `load_dependencies()` and `define_cron_hooks()` definitions
+- [x] 02-02: Fix version mismatch in `shopping-list.php` — remove the three premature `define()` calls before the plugin header block; set `SHOPPING_LIST_VERSION`, `SHOPPING_LIST_PLUGIN_FILE`, `SHOPPING_LIST_GITHUB_REPO` after the header; align version to `0.7.0` in both header and constant
+- [x] 02-03: Delete `includes/includesclass-shopping-list-cron.php`; verify canonical `includes/class-shopping-list-cron.php` schedules Monday 6 AM
 
 ### Phase 3: Admin Quality
 **Goal**: Fix admin-layer bugs — globally-loaded assets, misleading method name, fragile POST handling, and silent over-capacity behaviour
@@ -56,9 +56,9 @@ Plans:
   4. When the number of non-empty always-include items is 8 or more, a dismissible admin notice warns the admin that random items will not be added to the list
 
 Plans:
-- [ ] 03-01: Scope assets and rename method — add `$hook` parameter to `enqueue_admin_assets()`, add `settings_page_shopping-list-settings` guard, update `add_action` registration in `class-shopping-list.php`
-- [ ] 03-02: Harden `process_form_submission()` — sanitise and type-enforce `$_POST` reads at the point of assignment before passing to database methods
-- [ ] 03-03: Add over-capacity admin notice — after regeneration, if always-include count ≥ 8, display a dismissible `admin_notice` warning that random items are suppressed
+- [x] 03-01: Scope assets and rename method — add `$hook` parameter to `enqueue_admin_assets()`, add `settings_page_shopping-list-settings` guard, update `add_action` registration in `class-shopping-list.php`
+- [x] 03-02: Harden `process_form_submission()` — sanitise and type-enforce `$_POST` reads at the point of assignment before passing to database methods
+- [x] 03-03: Add over-capacity admin notice — after regeneration, if always-include count ≥ 8, display a dismissible `admin_notice` warning that random items are suppressed
 
 ### Phase 4: Code Quality
 **Goal**: Eliminate hard-coded magic numbers and confirm the codebase lints clean end-to-end
@@ -70,14 +70,14 @@ Plans:
   3. `php -l` passes on every PHP file in the plugin
 
 Plans:
-- [ ] 04-01: Define constants in `shopping-list.php`; replace all hard-coded slot/row/column values in `class-shopping-list-database.php` and `class-shopping-list-admin.php`
-- [ ] 04-02: Final `php -l` pass across all PHP files; confirm no regressions
+- [x] 04-01: Define constants in `shopping-list.php`; replace all hard-coded slot/row/column values in `class-shopping-list-database.php` and `class-shopping-list-admin.php`
+- [x] 04-02: Final `php -l` pass across all PHP files; confirm no regressions
 
 ## Progress
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Database Integrity | 0/3 | Not started | - |
-| 2. Bootstrap Integrity | 0/3 | Not started | - |
-| 3. Admin Quality | 0/3 | Not started | - |
-| 4. Code Quality | 0/2 | Not started | - |
+| 1. Database Integrity | 3/3 | Complete | 2026-04-09 |
+| 2. Bootstrap Integrity | 3/3 | Complete | 2026-04-09 |
+| 3. Admin Quality | 3/3 | Complete | 2026-04-09 |
+| 4. Code Quality | 2/2 | Complete | 2026-04-09 |
