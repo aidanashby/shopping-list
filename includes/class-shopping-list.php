@@ -42,6 +42,12 @@ class Shopping_List {
     private function define_cron_hooks() {
         $plugin_cron = new Shopping_List_Cron();
         add_action( 'shopping_list_weekly_regenerate', array( $plugin_cron, 'regenerate_list' ) );
+        $days = array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
+        foreach ( $days as $day ) {
+            add_action( 'shopping_list_rss_snapshot_' . $day, function() use ( $day ) {
+                Shopping_List_Cron::take_rss_snapshot( $day );
+            } );
+        }
     }
 
     private function define_update_hooks() {

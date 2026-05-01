@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Shopping List
  * Description: Manages randomised item displays with administrative controls and weekly automated regeneration.
- * Version: 0.7.0
+ * Version: 0.8.0
  * Author: Aidan Ashby
  * Text Domain: shopping-list
  */
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants
-define( 'SHOPPING_LIST_VERSION',     '0.7.0' );
+define( 'SHOPPING_LIST_VERSION',     '0.8.0' );
 define( 'SHOPPING_LIST_PLUGIN_FILE', __FILE__ );
 define( 'SHOPPING_LIST_PLUGIN_DIR',  plugin_dir_path( __FILE__ ) );
 define( 'SHOPPING_LIST_PLUGIN_URL',  plugin_dir_url( __FILE__ ) );
@@ -43,7 +43,9 @@ function activate_shopping_list() {
 
     Shopping_List_Database::create_default_options();
     Shopping_List_Cron::schedule_weekly_regeneration();
+    Shopping_List_Cron::schedule_daily_rss_snapshots();
     Shopping_List_Database::generate_random_selection();
+    Shopping_List_RSS::init_all_snapshots();
     flush_rewrite_rules();
 }
 
@@ -53,6 +55,7 @@ function activate_shopping_list() {
 function deactivate_shopping_list() {
     require_once SHOPPING_LIST_PLUGIN_DIR . 'includes/class-shopping-list-cron.php';
     Shopping_List_Cron::clear_scheduled_events();
+    Shopping_List_Cron::clear_daily_rss_snapshots();
 }
 
 // Bootstrap
