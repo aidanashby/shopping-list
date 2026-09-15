@@ -42,10 +42,7 @@ Each day feed stores a snapshot with a fixed `pubDate` of "that day at 06:00:00"
 
 ## Folder Structure
 
-shopping-list/  
-&nbsp;&nbsp;admin/  
-&nbsp;&nbsp;includes/  
-&nbsp;&nbsp;shopping-list.php
+shopping-list/ &nbsp;&nbsp;admin/ &nbsp;&nbsp;includes/ &nbsp;&nbsp;shopping-list.php
 
 ## Usage
 
