@@ -7,10 +7,21 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
     exit;
 }
 
+$days = array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
+
 // Clear scheduled cron events
 $timestamp = wp_next_scheduled( 'shopping_list_weekly_regenerate' );
 if ( $timestamp ) {
     wp_unschedule_event( $timestamp, 'shopping_list_weekly_regenerate' );
+}
+
+foreach ( $days as $day ) {
+    $hook      = 'shopping_list_rss_snapshot_' . $day;
+    $timestamp = wp_next_scheduled( $hook );
+    if ( $timestamp ) {
+        wp_unschedule_event( $timestamp, $hook );
+    }
+    delete_option( $hook );
 }
 
 // Remove plugin options
@@ -18,6 +29,8 @@ delete_option( 'shopping_list_always_include' );
 delete_option( 'shopping_list_not_needed' );
 delete_option( 'shopping_list_random_items' );
 delete_option( 'shopping_list_current_selection' );
+delete_option( 'shopping_list_social_template_intro' );
+delete_option( 'shopping_list_social_template_pair' );
 
 // Remove updater cache
 delete_site_transient( 'shopping_list_github_release' );
