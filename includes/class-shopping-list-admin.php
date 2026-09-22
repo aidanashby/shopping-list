@@ -109,10 +109,18 @@ class Shopping_List_Admin {
         $random_items = isset( $_POST['random_items'] ) && is_array( $_POST['random_items'] )
             ? wp_unslash( $_POST['random_items'] )
             : array();
+        $social_template_intro = isset( $_POST['social_template_intro'] )
+            ? wp_unslash( $_POST['social_template_intro'] )
+            : Shopping_List_Database::DEFAULT_SOCIAL_TEMPLATE_INTRO;
+        $social_template_pair = isset( $_POST['social_template_pair'] )
+            ? wp_unslash( $_POST['social_template_pair'] )
+            : Shopping_List_Database::DEFAULT_SOCIAL_TEMPLATE_PAIR;
 
         $always_updated    = Shopping_List_Database::update_always_include_items( $always_include );
         $not_needed_updated = Shopping_List_Database::update_not_needed_items( $not_needed );
         $random_updated    = Shopping_List_Database::update_random_items( $random_items );
+        Shopping_List_Database::update_social_template_intro( $social_template_intro );
+        Shopping_List_Database::update_social_template_pair( $social_template_pair );
 
         if ( $always_updated || $not_needed_updated || $random_updated ) {
             Shopping_List_Database::generate_random_selection();

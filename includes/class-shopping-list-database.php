@@ -46,32 +46,70 @@ class Shopping_List_Database {
         return get_option( 'shopping_list_current_selection', array() );
     }
 
+    /**
+     * Minimum number of rows enforced server-side for the Always Include /
+     * Not Needed / random-items lists. The UI already prevents deleting
+     * below this floor; this is the defensive backstop on save.
+     */
+    const MIN_LIST_ROWS = 3;
+    const MIN_GRID_COLS = 3;
+
     public static function update_always_include_items( $items ) {
-        $items = array_pad( array_slice( $items, 0, SHOPPING_LIST_SLOTS ), SHOPPING_LIST_SLOTS, '' );
+        $items = array_values( $items );
+        $items = array_pad( $items, self::MIN_LIST_ROWS, '' );
         $items = array_map( 'sanitize_text_field', $items );
         return update_option( 'shopping_list_always_include', $items );
     }
 
     public static function update_not_needed_items( $items ) {
-        $items = array_pad( array_slice( $items, 0, SHOPPING_LIST_SLOTS ), SHOPPING_LIST_SLOTS, '' );
+        $items = array_values( $items );
+        $items = array_pad( $items, self::MIN_LIST_ROWS, '' );
         $items = array_map( 'sanitize_text_field', $items );
         return update_option( 'shopping_list_not_needed', $items );
     }
 
     public static function update_random_items( $items ) {
-        $sanitised = array();
-        for ( $i = 0; $i < SHOPPING_LIST_RANDOM_ROWS; $i++ ) {
-            for ( $j = 0; $j < SHOPPING_LIST_RANDOM_COLS; $j++ ) {
-                $value = isset( $items[ $i ][ $j ] ) ? $items[ $i ][ $j ] : '';
-                $sanitised[ $i ][ $j ] = sanitize_text_field( $value );
-            }
+        $rows = array_values( is_array( $items ) ? $items : array() );
+        $rows = array_pad( $rows, self::MIN_LIST_ROWS, array() );
+
+        $col_count = self::MIN_GRID_COLS;
+        foreach ( $rows as $row ) {
+            $col_count = max( $col_count, count( (array) $row ) );
         }
+
+        $sanitised = array();
+        foreach ( $rows as $row ) {
+            $row = array_values( (array) $row );
+            $row = array_pad( $row, $col_count, '' );
+            $sanitised[] = array_map( 'sanitize_text_field', $row );
+        }
+
         return update_option( 'shopping_list_random_items', $sanitised );
     }
 
     public static function update_current_selection( $selection ) {
         $selection = array_map( 'sanitize_text_field', $selection );
         return update_option( 'shopping_list_current_selection', $selection );
+    }
+
+    const DEFAULT_SOCIAL_TEMPLATE_INTRO = "🌟 Good Monday morning, Shopporters!\nOur shelves are running low on some essentials this week. If you're out shopping, could you pick up an extra item or two for your local food bank?\nThis week's urgent needs are [items].\nYou can drop off donations at any of our collection points, or shop for us online for direct delivery: givetoday.co.uk/nbsgfoodbank";
+
+    const DEFAULT_SOCIAL_TEMPLATE_PAIR = "📢 Today's urgent food bank needs: [items]\nOur warehouse is running low. Can you add something to your shop for your neighbours?\nDrop off at a collection point or shop online: http://givetoday.co.uk/nbsgfoodbank";
+
+    public static function get_social_template_intro() {
+        return get_option( 'shopping_list_social_template_intro', self::DEFAULT_SOCIAL_TEMPLATE_INTRO );
+    }
+
+    public static function get_social_template_pair() {
+        return get_option( 'shopping_list_social_template_pair', self::DEFAULT_SOCIAL_TEMPLATE_PAIR );
+    }
+
+    public static function update_social_template_intro( $template ) {
+        return update_option( 'shopping_list_social_template_intro', sanitize_textarea_field( $template ) );
+    }
+
+    public static function update_social_template_pair( $template ) {
+        return update_option( 'shopping_list_social_template_pair', sanitize_textarea_field( $template ) );
     }
 
     public static function generate_random_selection() {
