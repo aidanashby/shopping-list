@@ -75,8 +75,8 @@ class Shopping_List_Updater {
             'slug' => $this->slug,
             'version' => $version,
             'author' => $plugin_data['Author'],
-            'homepage' => $plugin_data['PluginURI'] ?: $release['url'],
-            'download_link' => $release['zipball'],
+            'homepage' => $plugin_data['PluginURI'] ?: ($release['url'] ?? ''),
+            'download_link' => $release['zipball'] ?? '',
             'sections' => array(
                 'description' => $plugin_data['Description']
             )

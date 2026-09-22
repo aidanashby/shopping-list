@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Shopping List
  * Description: Manages randomised item displays with administrative controls and weekly automated regeneration.
- * Version: 0.8.0
+ * Version: 0.9.0
  * Author: Aidan Ashby
  * Text Domain: shopping-list
  */
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants
-define( 'SHOPPING_LIST_VERSION',     '0.8.0' );
+define( 'SHOPPING_LIST_VERSION',     '0.9.0' );
 define( 'SHOPPING_LIST_PLUGIN_FILE', __FILE__ );
 define( 'SHOPPING_LIST_PLUGIN_DIR',  plugin_dir_path( __FILE__ ) );
 define( 'SHOPPING_LIST_PLUGIN_URL',  plugin_dir_url( __FILE__ ) );
@@ -71,3 +71,11 @@ function shopping_list_rss_init() {
 }
 
 add_action( 'template_redirect', array( 'Shopping_List_RSS', 'handle_rss_request' ) );
+
+// Settings link on the plugins list page
+add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'shopping_list_action_links' );
+function shopping_list_action_links( $links ) {
+    $settings_link = '<a href="' . esc_url( admin_url( 'options-general.php?page=shopping-list-settings' ) ) . '">Settings</a>';
+    array_unshift( $links, $settings_link );
+    return $links;
+}
