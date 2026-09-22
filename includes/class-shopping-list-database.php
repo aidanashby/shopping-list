@@ -4,19 +4,28 @@
  */
 class Shopping_List_Database {
 
+    /**
+     * Floor AND fresh-install default for Always Include / Not Needed / the
+     * random-items grid. A brand-new site starts at this size; existing
+     * sites with more rows already stored keep them all — this only pads
+     * up, never truncates.
+     */
+    const MIN_LIST_ROWS = 3;
+    const MIN_GRID_COLS = 3;
+
     public static function create_default_options() {
         if ( ! get_option( 'shopping_list_always_include' ) ) {
-            add_option( 'shopping_list_always_include', array_fill( 0, SHOPPING_LIST_SLOTS, '' ) );
+            add_option( 'shopping_list_always_include', array_fill( 0, self::MIN_LIST_ROWS, '' ) );
         }
 
         if ( ! get_option( 'shopping_list_not_needed' ) ) {
-            add_option( 'shopping_list_not_needed', array_fill( 0, SHOPPING_LIST_SLOTS, '' ) );
+            add_option( 'shopping_list_not_needed', array_fill( 0, self::MIN_LIST_ROWS, '' ) );
         }
 
         if ( ! get_option( 'shopping_list_random_items' ) ) {
             $random_items = array();
-            for ( $i = 0; $i < SHOPPING_LIST_RANDOM_ROWS; $i++ ) {
-                $random_items[ $i ] = array_fill( 0, SHOPPING_LIST_RANDOM_COLS, '' );
+            for ( $i = 0; $i < self::MIN_LIST_ROWS; $i++ ) {
+                $random_items[ $i ] = array_fill( 0, self::MIN_GRID_COLS, '' );
             }
             add_option( 'shopping_list_random_items', $random_items );
         }
@@ -27,32 +36,35 @@ class Shopping_List_Database {
     }
 
     public static function get_always_include_items() {
-        return get_option( 'shopping_list_always_include', array_fill( 0, SHOPPING_LIST_SLOTS, '' ) );
+        $items = get_option( 'shopping_list_always_include', array() );
+        return count( $items ) >= self::MIN_LIST_ROWS ? $items : array_pad( $items, self::MIN_LIST_ROWS, '' );
     }
 
     public static function get_not_needed_items() {
-        return get_option( 'shopping_list_not_needed', array_fill( 0, SHOPPING_LIST_SLOTS, '' ) );
+        $items = get_option( 'shopping_list_not_needed', array() );
+        return count( $items ) >= self::MIN_LIST_ROWS ? $items : array_pad( $items, self::MIN_LIST_ROWS, '' );
     }
 
     public static function get_random_items() {
-        $default = array();
-        for ( $i = 0; $i < SHOPPING_LIST_RANDOM_ROWS; $i++ ) {
-            $default[ $i ] = array_fill( 0, SHOPPING_LIST_RANDOM_COLS, '' );
+        $rows = get_option( 'shopping_list_random_items', array() );
+        $rows = array_pad( $rows, self::MIN_LIST_ROWS, array() );
+
+        $col_count = self::MIN_GRID_COLS;
+        foreach ( $rows as $row ) {
+            $col_count = max( $col_count, count( (array) $row ) );
         }
-        return get_option( 'shopping_list_random_items', $default );
+
+        foreach ( $rows as &$row ) {
+            $row = array_pad( (array) $row, $col_count, '' );
+        }
+        unset( $row );
+
+        return $rows;
     }
 
     public static function get_current_selection() {
         return get_option( 'shopping_list_current_selection', array() );
     }
-
-    /**
-     * Minimum number of rows enforced server-side for the Always Include /
-     * Not Needed / random-items lists. The UI already prevents deleting
-     * below this floor; this is the defensive backstop on save.
-     */
-    const MIN_LIST_ROWS = 3;
-    const MIN_GRID_COLS = 3;
 
     public static function update_always_include_items( $items ) {
         $items = array_values( $items );

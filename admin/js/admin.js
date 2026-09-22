@@ -117,38 +117,38 @@ jQuery(document).ready(function($) {
         });
     }
 
-    function isRowSoleContent($input) {
-        if (!$input.val().trim()) {
-            return false;
-        }
-        var $row = $input.closest('.grid-row');
-        var others = $row.find('.field-clearable input').not($input);
-        return others.toArray().every(function(el) {
-            return !$(el).val().trim();
-        });
+    function rowInputs($input) {
+        return $input.closest('.grid-row').find('.field-clearable input');
     }
 
-    function isColSoleContent($input) {
-        if (!$input.val().trim()) {
-            return false;
-        }
+    function colInputs($input) {
         var $cellWrap = $input.closest('.field-clearable');
         var $row = $cellWrap.closest('.grid-row');
         var $grid = $row.closest('.random-items-grid');
         var colIndex = $row.find('.field-clearable').index($cellWrap);
-
-        var soleContent = true;
+        var $inputs = $();
         $grid.find('.grid-row').each(function() {
             var $cell = $(this).find('.field-clearable').eq(colIndex);
-            if (!$cell.length || $cell.is($cellWrap)) {
-                return;
-            }
-            if ($cell.find('input').val().trim()) {
-                soleContent = false;
-                return false;
+            if ($cell.length) {
+                $inputs = $inputs.add($cell.find('input'));
             }
         });
-        return soleContent;
+        return $inputs;
+    }
+
+    function isEmpty($inputs) {
+        return $inputs.toArray().every(function(el) {
+            return !$(el).val().trim();
+        });
+    }
+
+    function isSoleContent($input, $inputs) {
+        if (!$input.val().trim()) {
+            return false;
+        }
+        return $inputs.not($input).toArray().every(function(el) {
+            return !$(el).val().trim();
+        });
     }
 
     $(document).on('click', '.random-items-grid .clear-field', function() {
@@ -163,8 +163,33 @@ jQuery(document).ready(function($) {
         var rowCount = $grid.find('.grid-row').length;
         var colCount = $row.find('.field-clearable').length;
 
-        var rowSole = isRowSoleContent($input);
-        var colSole = isColSoleContent($input);
+        var $rowInputs = rowInputs($input);
+        var $colInputs = colInputs($input);
+
+        var rowEmpty = isEmpty($rowInputs);
+        var colEmpty = isEmpty($colInputs);
+        var rowSole = !rowEmpty && isSoleContent($input, $rowInputs);
+        var colSole = !colEmpty && isSoleContent($input, $colInputs);
+
+        // A row/column with nothing in it at all is always safe to remove outright
+        // (an admin who added a row/column and changed their mind, or is trimming
+        // unused ones) — removing it can never destroy data in other rows/columns.
+        // Checked before the sole-content cases, so an all-blank row/column takes
+        // priority over any ambiguity below.
+        if (rowEmpty && rowCount > minRows) {
+            $row.remove();
+            renumberGrid($grid);
+            return;
+        }
+
+        if (colEmpty && colCount > minCols) {
+            var emptyColIndex = $row.find('.field-clearable').index($cellWrap);
+            $grid.find('.grid-row').each(function() {
+                $(this).find('.field-clearable').eq(emptyColIndex).remove();
+            });
+            renumberGrid($grid);
+            return;
+        }
 
         if (rowSole && !colSole && rowCount > minRows) {
             $row.remove();
