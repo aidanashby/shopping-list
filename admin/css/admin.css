@@ -150,9 +150,12 @@
     font-weight: 500;
 }
 
+.shopping-list-section .form-table .field-clearable {
+    max-width: 300px;
+}
+
 .shopping-list-section .form-table .regular-text {
     width: 100%;
-    max-width: 300px;
 }
 
 /* Fainter placeholder text */
