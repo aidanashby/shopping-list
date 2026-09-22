@@ -109,12 +109,15 @@ class Shopping_List_Admin {
         $random_items = isset( $_POST['random_items'] ) && is_array( $_POST['random_items'] )
             ? wp_unslash( $_POST['random_items'] )
             : array();
+        // The social template fields only render when there's a current selection to preview
+        // against — fall back to the existing saved value (not the default) so saving the rest
+        // of the form while the list happens to be empty can't silently reset a custom template.
         $social_template_intro = isset( $_POST['social_template_intro'] )
             ? wp_unslash( $_POST['social_template_intro'] )
-            : Shopping_List_Database::DEFAULT_SOCIAL_TEMPLATE_INTRO;
+            : Shopping_List_Database::get_social_template_intro();
         $social_template_pair = isset( $_POST['social_template_pair'] )
             ? wp_unslash( $_POST['social_template_pair'] )
-            : Shopping_List_Database::DEFAULT_SOCIAL_TEMPLATE_PAIR;
+            : Shopping_List_Database::get_social_template_pair();
 
         $always_updated    = Shopping_List_Database::update_always_include_items( $always_include );
         $not_needed_updated = Shopping_List_Database::update_not_needed_items( $not_needed );

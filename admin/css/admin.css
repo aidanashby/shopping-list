@@ -1,174 +1,290 @@
-/* Social Media Blocks */
-.social-media-blocks {
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    padding: 20px;
-    margin-bottom: 30px;
-    border-radius: 4px;
-}
-
-.social-blocks-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 15px;
-    margin-top: 15px;
-}
-
-.social-block {
-    position: relative;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 8px;
-}
-
-.social-block textarea {
-    width: 100%;
-    height: 120px;
-    resize: none;
-    border: none;
-    background: transparent;
-    font-size: 12px;
-    line-height: 1.3;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-}
-
-.copy-button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: #0073aa;
-    color: white;
-    border: none;
-    padding: 4px 8px;
-    font-size: 11px;
-    border-radius: 3px;
-    cursor: pointer;
-    z-index: 10;
-}
-
-.copy-button:hover {
-    background: #005a87;
-}
-
-.copy-button.copied {
-    background: #46b450;
-}
-
-/* Side by side sections */
-.side-by-side-sections {
-    display: flex;
-    gap: 30px;
-    margin-bottom: 30px;
-}
-
-.half-width {
-    flex: 1;
-}
-
-.shopping-list-section {
-    margin-bottom: 30px;
-}
-
-/* Tighter spacing for form tables */
-.shopping-list-section .form-table th,
-.shopping-list-section .form-table td {
-    padding: 8px 0;
-}
-
-.shopping-list-section .form-table th {
-    width: 100px;
-    font-size: 13px;
-}
-
-.shopping-list-section .form-table .regular-text {
-    width: 300px;
-}
-
-/* Fainter placeholder text */
-.shopping-list-section input::placeholder,
-.grid-input::placeholder {
-    color: #c3c4c7;
-    opacity: 1;
-}
-
-.shopping-list-section input::-webkit-input-placeholder {
-    color: #c3c4c7;
-}
-
-.shopping-list-section input::-moz-placeholder {
-    color: #c3c4c7;
-    opacity: 1;
-}
-
-.shopping-list-section input:-ms-input-placeholder {
-    color: #c3c4c7;
-}
-
-/* Random items grid */
-.random-items-grid {
-    max-width: 100%;
-    overflow-x: auto;
-}
-
-.grid-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-    gap: 10px;
-}
-
-.row-label {
-    min-width: 60px;
-    font-weight: bold;
-    font-size: 12px;
-}
-
-.grid-input {
-    flex: 1;
-    max-width: 200px;
-    padding: 4px 8px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-}
-
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-    .social-blocks-container {
-        grid-template-columns: 1fr;
-    }
-    
-    .side-by-side-sections {
-        flex-direction: column;
-        gap: 20px;
-    }
-    
-    .grid-row {
-        flex-wrap: wrap;
-    }
-    
-    .grid-input {
-        max-width: none;
-        min-width: 150px;
-    }
-    
-    .shopping-list-section .form-table .regular-text {
-        width: 100%;
-    }
-}
-
-@media (max-width: 480px) {
-    .social-blocks-container {
-        gap: 10px;
-    }
-    
-    .social-block {
-        padding: 6px;
-    }
-    
-    .social-block textarea {
-        height: 100px;
-        font-size: 11px;
-    }
-}
+.shopping-list-wrap {
+    --sl-border: #dcdcde;
+    --sl-border-strong: #c3c4c7;
+    --sl-radius: 8px;
+    --sl-gap: 24px;
+    --sl-accent: #2271b1;
+    --sl-muted: #646970;
+    --sl-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.shopping-list-wrap h1 {
+    margin-bottom: var(--sl-gap);
+}
+
+/* Cards */
+.social-media-blocks,
+.shopping-list-section {
+    background: #fff;
+    border: 1px solid var(--sl-border);
+    border-radius: var(--sl-radius);
+    box-shadow: var(--sl-shadow);
+    padding: 20px 24px;
+    margin-bottom: var(--sl-gap);
+}
+
+.shopping-list-section h2,
+.social-media-blocks h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    margin-top: 0;
+}
+
+.shopping-list-section h2 .dashicons {
+    color: var(--sl-accent);
+}
+
+/* Social Media Blocks */
+.social-blocks-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.social-block {
+    position: relative;
+    background: #f6f7f7;
+    border: 1px solid var(--sl-border);
+    border-radius: 6px;
+    padding: 10px;
+}
+
+.social-block-actions {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    display: flex;
+    gap: 4px;
+    z-index: 10;
+}
+
+.social-block textarea {
+    width: 100%;
+    resize: none;
+    border: none;
+    background: transparent;
+    font-size: 12px;
+    line-height: 1.4;
+    padding: 0;
+    padding-right: 60px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+.social-block .social-preview {
+    height: 120px;
+}
+
+.social-block .social-template-input {
+    height: 120px;
+    padding-right: 0;
+    background: #fff;
+    border: 1px solid var(--sl-border);
+    border-radius: 4px;
+    padding: 6px;
+}
+
+.social-template-editor {
+    margin-top: 6px;
+}
+
+.template-hint {
+    font-size: 11px;
+    color: var(--sl-muted);
+    margin: 4px 0;
+}
+
+.social-block .reset-template {
+    margin-top: 6px;
+}
+
+.edit-button,
+.copy-button {
+    background: var(--sl-accent);
+    color: #fff;
+    border: none;
+    padding: 4px 8px;
+    font-size: 11px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.edit-button {
+    background: #50575e;
+}
+
+.copy-button:hover {
+    background: #005a87;
+}
+
+.edit-button:hover {
+    background: #3c434a;
+}
+
+.copy-button.copied {
+    background: #46b450;
+}
+
+/* Side by side sections */
+.side-by-side-sections {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 0;
+}
+
+.half-width {
+    flex: 1;
+}
+
+/* Tighter spacing for form tables */
+.shopping-list-section .form-table th,
+.shopping-list-section .form-table td {
+    padding: 6px 0;
+}
+
+.shopping-list-section .form-table th {
+    width: 100px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.shopping-list-section .form-table .regular-text {
+    width: 100%;
+    max-width: 300px;
+}
+
+/* Fainter placeholder text */
+.shopping-list-section input::placeholder,
+.grid-input::placeholder {
+    color: #c3c4c7;
+    opacity: 1;
+}
+
+/* Clearable / deletable field control */
+.field-clearable {
+    position: relative;
+    display: block;
+    max-width: 100%;
+}
+
+.field-clearable input {
+    padding-right: 26px;
+}
+
+.field-clearable .clear-field {
+    position: absolute;
+    top: 50%;
+    right: 4px;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #a7aaad;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.field-clearable .clear-field:hover {
+    color: #50575e;
+    background: #f0f0f1;
+}
+
+.add-row,
+.add-grid-row,
+.add-grid-col {
+    margin-top: 8px;
+}
+
+.grid-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+}
+
+/* Random items grid */
+.random-items-grid {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.grid-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    gap: 10px;
+}
+
+.grid-row .row-label {
+    min-width: 60px;
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--sl-muted);
+}
+
+.grid-cells {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.grid-input {
+    width: 160px;
+    padding: 4px 8px;
+    border: 1px solid var(--sl-border);
+    border-radius: 4px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .social-blocks-container {
+        grid-template-columns: 1fr;
+    }
+
+    .side-by-side-sections {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .grid-row {
+        flex-wrap: wrap;
+    }
+
+    .grid-cells {
+        width: 100%;
+    }
+
+    .grid-input {
+        width: 100%;
+        min-width: 150px;
+    }
+
+    .shopping-list-section .form-table .regular-text {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .social-blocks-container {
+        gap: 10px;
+    }
+
+    .social-block {
+        padding: 8px;
+    }
+
+    .social-block textarea {
+        height: 100px;
+        font-size: 11px;
+    }
+
+    .shopping-list-section,
+    .social-media-blocks {
+        padding: 16px;
+    }
+}
