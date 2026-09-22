@@ -62,7 +62,7 @@ This project is released under the MIT License. See LICENSE for details.
 
 ## Changelog
 
-### 0.9.0
+### 0.9.1
 - Always Include, Not Needed, and the randomly-selected grid are no longer fixed-size — rows (and, for the grid, columns) can be added or removed freely, with a floor of 3 (3×3 for the grid) that a brand-new install now starts at, instead of the old fixed 8 / 40×4. Existing sites with more rows already stored keep them all.
 - The clear (×) button on every field now also deletes: for Always Include/Not Needed it removes the row outright (falling back to just clearing at the 3-row floor); for the grid it removes the row or column when this is the only thing left in it, or when the row/column is entirely blank — otherwise it just clears the field.
 - Social media post templates are now editable in place (Edit/Reset next to Copy), using an `[items]` token. The whole-week post and the daily posts each have their own template; the daily posts share one template between them.
