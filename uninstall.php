@@ -32,7 +32,9 @@ delete_option( 'shopping_list_current_selection' );
 delete_option( 'shopping_list_social_template_intro' );
 delete_option( 'shopping_list_social_template_pair' );
 
-// Remove updater cache
+// Remove updater cache and Plugin Update Checker state
 delete_site_transient( 'shopping_list_github_release' );
+delete_site_option( 'external_updates-shopping-list' );
+wp_clear_scheduled_hook( 'puc_cron_check_updates-shopping-list' );
 
 wp_cache_flush();

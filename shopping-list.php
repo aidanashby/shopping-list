@@ -5,6 +5,7 @@
  * Version: 0.9.1
  * Author: Aidan Ashby
  * Text Domain: shopping-list
+ * Update URI: https://github.com/aidanashby/shopping-list
  */
 
 // Prevent direct access

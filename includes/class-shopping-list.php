@@ -23,7 +23,7 @@ class Shopping_List {
         require_once SHOPPING_LIST_PLUGIN_DIR . 'includes/class-shopping-list-frontend.php';
         require_once SHOPPING_LIST_PLUGIN_DIR . 'includes/class-shopping-list-cron.php';
         require_once SHOPPING_LIST_PLUGIN_DIR . 'includes/class-shopping-list-rss.php';
-        require_once SHOPPING_LIST_PLUGIN_DIR . 'includes/class-shopping-list-updater.php';
+        require_once SHOPPING_LIST_PLUGIN_DIR . 'plugin-update-checker/plugin-update-checker.php';
     }
 
     private function define_admin_hooks() {
@@ -51,8 +51,12 @@ class Shopping_List {
     }
 
     private function define_update_hooks() {
-        $updater = new Shopping_List_Updater( SHOPPING_LIST_PLUGIN_FILE, SHOPPING_LIST_VERSION, SHOPPING_LIST_GITHUB_REPO );
-        $updater->init_hooks();
+        $checker = YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
+            'https://github.com/' . SHOPPING_LIST_GITHUB_REPO . '/',
+            SHOPPING_LIST_PLUGIN_FILE,
+            'shopping-list'
+        );
+        $checker->getVcsApi()->enableReleaseAssets();
     }
 
     public function run() {
