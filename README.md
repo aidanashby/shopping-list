@@ -43,7 +43,9 @@ Each day feed stores a snapshot with a fixed `pubDate` of "that day at 06:00:00"
 
 ## Folder Structure
 
-shopping-list/ &nbsp;&nbsp;admin/ &nbsp;&nbsp;includes/ &nbsp;&nbsp;shopping-list.php
+shopping-list/ &nbsp;&nbsp;admin/ &nbsp;&nbsp;assets/ &nbsp;&nbsp;includes/ &nbsp;&nbsp;plugin-update-checker/ &nbsp;&nbsp;shopping-list.php &nbsp;&nbsp;uninstall.php
+
+`plugin-update-checker/` is the bundled library that installs updates from this repo's GitHub releases. `assets/` holds the icons shown on the Plugins and Updates screens.
 
 ## Usage
 
