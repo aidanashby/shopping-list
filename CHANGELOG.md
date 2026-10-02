@@ -1,5 +1,8 @@
 # Changelog
 
+## [Unreleased]
+- Widened the randomly-selected grid's columns from 160px to 220px.
+
 ## [0.10.0] - 2026-10-02
 - Pasting multi-line text into Always Include, Not Needed, or the randomly-selected grid now fills one field per line down the column, skipping blank lines. New rows are inserted wherever the next field is already filled, so existing entries are never overwritten.
 - Added a "Clear all" button beside "+ Add row"/"+ Add column" that empties the randomly-selected grid (with a confirmation).
