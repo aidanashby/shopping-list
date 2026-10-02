@@ -50,7 +50,7 @@ shopping-list/ &nbsp;&nbsp;admin/ &nbsp;&nbsp;assets/ &nbsp;&nbsp;includes/ &nbs
 ## Usage
 
 - Use the admin page to manage items and weekly regeneration settings.
-- Always Include, Not Needed, and the randomly-selected grid each start at a minimum of 3 rows (3 columns for the grid) and can be freely expanded with "+ Add row"/"+ Add column" — the × on a field clears it, or removes the row/column outright once it's the last thing left in it (or entirely blank).
+- Always Include, Not Needed, and the randomly-selected grid each start at a minimum of 3 rows (3 columns for the grid) and can be freely expanded with "+ Add row"/"+ Add column" — the × on a field clears it, or removes the row/column outright once it's the last thing left in it (or entirely blank). Saving also removes any blank rows (and, for the grid, blank columns), down to that minimum.
 - Pasting text with several lines into any list field puts one line in each field, going down the column. Blank lines are skipped, and a new row is added wherever the next field down is already filled (or there is no next row), so nothing is overwritten.
 - "Clear all" under the randomly-selected grid empties every field in the grid after a confirmation. The rows and columns stay, and nothing is saved until you click Save.
 - Click "Edit" next to a social media post to change its underlying template; the daily posts share one template, so editing any of them updates the rest. "Reset to default" restores the built-in wording.

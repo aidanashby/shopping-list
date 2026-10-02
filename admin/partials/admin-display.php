@@ -94,7 +94,7 @@ if (!empty($current_selection)) {
         <div class="side-by-side-sections">
             <div class="shopping-list-section half-width">
                 <h2><span class="dashicons dashicons-star-filled"></span> Always Include Items</h2>
-                <p>These items will always appear first in your shopping list:</p>
+                <p>These items will always appear first in your shopping list, displayed via <code>[shop_list]</code>:</p>
                 <table class="form-table list-rows" data-min-rows="3">
                     <?php foreach ( $always_include as $i => $value ): ?>
                         <tr class="list-row">

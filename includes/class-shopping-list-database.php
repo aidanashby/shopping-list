@@ -66,37 +66,63 @@ class Shopping_List_Database {
         return get_option( 'shopping_list_current_selection', array() );
     }
 
+    // Sanitises a single-column list and drops blank rows, then pads back up to the
+    // minimum so the admin page always shows at least MIN_LIST_ROWS fields.
+    public static function compact_list( $items ) {
+        $items = array_map( 'sanitize_text_field', array_values( (array) $items ) );
+        $items = array_values( array_filter( $items, function ( $item ) {
+            return '' !== $item;
+        } ) );
+        return array_pad( $items, self::MIN_LIST_ROWS, '' );
+    }
+
+    // Sanitises the grid and drops rows and columns that are entirely blank, then pads
+    // back up to the MIN_LIST_ROWS x MIN_GRID_COLS floor.
+    public static function compact_grid( $items ) {
+        $rows      = array();
+        $col_count = 0;
+        foreach ( is_array( $items ) ? $items : array() as $row ) {
+            $row = array_map( 'sanitize_text_field', array_values( (array) $row ) );
+            if ( '' === implode( '', $row ) ) {
+                continue;
+            }
+            $rows[]    = $row;
+            $col_count = max( $col_count, count( $row ) );
+        }
+
+        $keep_cols = array();
+        for ( $c = 0; $c < $col_count; $c++ ) {
+            foreach ( $rows as $row ) {
+                if ( isset( $row[ $c ] ) && '' !== $row[ $c ] ) {
+                    $keep_cols[] = $c;
+                    break;
+                }
+            }
+        }
+
+        $width = max( self::MIN_GRID_COLS, count( $keep_cols ) );
+        $grid  = array();
+        foreach ( $rows as $row ) {
+            $kept = array();
+            foreach ( $keep_cols as $c ) {
+                $kept[] = isset( $row[ $c ] ) ? $row[ $c ] : '';
+            }
+            $grid[] = array_pad( $kept, $width, '' );
+        }
+
+        return array_pad( $grid, self::MIN_LIST_ROWS, array_fill( 0, $width, '' ) );
+    }
+
     public static function update_always_include_items( $items ) {
-        $items = array_values( $items );
-        $items = array_pad( $items, self::MIN_LIST_ROWS, '' );
-        $items = array_map( 'sanitize_text_field', $items );
-        return update_option( 'shopping_list_always_include', $items );
+        return update_option( 'shopping_list_always_include', self::compact_list( $items ) );
     }
 
     public static function update_not_needed_items( $items ) {
-        $items = array_values( $items );
-        $items = array_pad( $items, self::MIN_LIST_ROWS, '' );
-        $items = array_map( 'sanitize_text_field', $items );
-        return update_option( 'shopping_list_not_needed', $items );
+        return update_option( 'shopping_list_not_needed', self::compact_list( $items ) );
     }
 
     public static function update_random_items( $items ) {
-        $rows = array_values( is_array( $items ) ? $items : array() );
-        $rows = array_pad( $rows, self::MIN_LIST_ROWS, array() );
-
-        $col_count = self::MIN_GRID_COLS;
-        foreach ( $rows as $row ) {
-            $col_count = max( $col_count, count( (array) $row ) );
-        }
-
-        $sanitised = array();
-        foreach ( $rows as $row ) {
-            $row = array_values( (array) $row );
-            $row = array_pad( $row, $col_count, '' );
-            $sanitised[] = array_map( 'sanitize_text_field', $row );
-        }
-
-        return update_option( 'shopping_list_random_items', $sanitised );
+        return update_option( 'shopping_list_random_items', self::compact_grid( $items ) );
     }
 
     public static function update_current_selection( $selection ) {

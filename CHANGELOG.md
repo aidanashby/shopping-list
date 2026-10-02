@@ -1,7 +1,9 @@
 # Changelog
 
-## [Unreleased]
+## [0.11.0] - 2026-10-02
 - Widened the randomly-selected grid's columns from 160px to 220px.
+- Saving now removes blank rows from Always Include and Not Needed, and blank rows and columns from the randomly-selected grid (keeping the 3-row / 3×3 minimum).
+- The Always Include section now names the `[shop_list]` shortcode that displays it, as Not Needed does for `[noshop_list]`.
 
 ## [0.10.0] - 2026-10-02
 - Pasting multi-line text into Always Include, Not Needed, or the randomly-selected grid now fills one field per line down the column, skipping blank lines. New rows are inserted wherever the next field is already filled, so existing entries are never overwritten.
