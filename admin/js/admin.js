@@ -94,15 +94,16 @@ jQuery(document).ready(function($) {
         }
     });
 
+    function newListRow($section) {
+        var target = $section.find('.add-row').data('target');
+        var $template = $section.find('#' + target.replace(/-rows$/, '-row-template'));
+        return fillTemplate($template, { '__INDEX__': uid('r') });
+    }
+
     $('.add-row').on('click', function() {
-        var target = $(this).data('target');
-        var templateId = '#' + target.replace(/-rows$/, '-row-template');
         var $section = $(this).closest('.shopping-list-section');
         var $table = $section.find('.list-rows');
-        var $template = $section.find(templateId);
-
-        var $newRow = fillTemplate($template, { '__INDEX__': uid('r') });
-        $table.append($newRow);
+        $table.append(newListRow($section));
         renumberListRows($table);
     });
 
@@ -210,8 +211,7 @@ jQuery(document).ready(function($) {
         $input.val('').trigger('input').focus();
     });
 
-    $('.add-grid-row').on('click', function() {
-        var $section = $(this).closest('.shopping-list-section');
+    function newGridRow($section) {
         var $grid = $section.find('.random-items-grid');
         var $rowTemplate = $section.find('#grid-row-template');
         var $cellTemplate = $section.find('#grid-cell-template');
@@ -230,8 +230,82 @@ jQuery(document).ready(function($) {
             $cells.append($cell);
         });
 
-        $grid.append($newRow);
+        return $newRow;
+    }
+
+    $('.add-grid-row').on('click', function() {
+        var $grid = $(this).closest('.shopping-list-section').find('.random-items-grid');
+        $grid.append(newGridRow($grid.closest('.shopping-list-section')));
         renumberGrid($grid);
+    });
+
+    $('.clear-grid').on('click', function() {
+        if (!window.confirm('Clear every item in the randomly selected items grid? Nothing is saved until you click Save.')) {
+            return;
+        }
+        $(this).closest('.shopping-list-section').find('.random-items-grid input').val('').trigger('input');
+    });
+
+    // --- Multi-line paste: one line per cell, going down the column ---
+
+    // Returns the input in the same column of the next row, inserting a new
+    // row there when there is no next row or its cell is already filled.
+    function nextCellDown($input) {
+        var $section = $input.closest('.shopping-list-section');
+        var $grid = $input.closest('.random-items-grid');
+
+        if ($grid.length) {
+            var $cellWrap = $input.closest('.field-clearable');
+            var $row = $cellWrap.closest('.grid-row');
+            var colIndex = $row.find('.field-clearable').index($cellWrap);
+            var $next = $row.next('.grid-row').find('.field-clearable').eq(colIndex).find('input');
+            if ($next.length && !$next.val().trim()) {
+                return $next;
+            }
+            var $newRow = newGridRow($section);
+            $row.after($newRow);
+            renumberGrid($grid);
+            return $newRow.find('.field-clearable').eq(colIndex).find('input');
+        }
+
+        var $listRow = $input.closest('.list-row');
+        var $nextInput = $listRow.next('.list-row').find('input');
+        if ($nextInput.length && !$nextInput.val().trim()) {
+            return $nextInput;
+        }
+        var $newListRow = newListRow($section);
+        $listRow.after($newListRow);
+        renumberListRows($listRow.closest('.list-rows'));
+        return $newListRow.find('input');
+    }
+
+    $(document).on('paste', '.list-rows input, .random-items-grid input', function(e) {
+        var clipboard = e.originalEvent.clipboardData;
+        var text = clipboard ? clipboard.getData('text') : '';
+        if (!/[\r\n]/.test(text)) {
+            return; // single line: let the browser paste normally
+        }
+        e.preventDefault();
+
+        var lines = text.split(/\r\n|\r|\n/).map(function(line) {
+            return line.trim();
+        }).filter(Boolean);
+        if (!lines.length) {
+            return;
+        }
+
+        // First line replaces the current selection in the field being pasted into.
+        var el = this;
+        var start = el.selectionStart, end = el.selectionEnd;
+        el.value = el.value.slice(0, start) + lines[0] + el.value.slice(end);
+        $(el).trigger('input');
+
+        var $input = $(el);
+        for (var i = 1; i < lines.length; i++) {
+            $input = nextCellDown($input);
+            $input.val(lines[i]).trigger('input');
+        }
+        $input.focus();
     });
 
     $('.add-grid-col').on('click', function() {

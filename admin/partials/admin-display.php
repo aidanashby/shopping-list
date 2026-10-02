@@ -165,6 +165,7 @@ if (!empty($current_selection)) {
             <div class="grid-actions">
                 <button type="button" class="button add-grid-row">+ Add row</button>
                 <button type="button" class="button add-grid-col">+ Add column</button>
+                <button type="button" class="button clear-grid">Clear all</button>
             </div>
             <template id="grid-row-template">
                 <div class="grid-row" data-row-index="__ROW__">
