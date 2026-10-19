@@ -15,7 +15,7 @@ function shopping_list_clearable_input( $name, $value, $classes = 'regular-text'
     }
     printf(
         '<span class="field-clearable"%s><input type="text" name="%s" value="%s" class="%s" placeholder="%s" /><button type="button" class="clear-field dashicons dashicons-no-alt" tabindex="-1" aria-label="Clear field"></button></span>',
-        $attr_str,
+        $attr_str, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from esc_attr() above
         esc_attr( $name ),
         esc_attr( $value ),
         esc_attr( $classes ),
@@ -77,9 +77,9 @@ if (!empty($current_selection)) {
                     <div class="social-block" data-template-field="<?php echo esc_attr( $template_field ); ?>">
                         <div class="social-block-actions">
                             <button type="button" class="edit-button">Edit</button>
-                            <button type="button" class="copy-button" data-clipboard-target="#social-text-<?php echo $index; ?>">Copy</button>
+                            <button type="button" class="copy-button" data-clipboard-target="#social-text-<?php echo absint( $index ); ?>">Copy</button>
                         </div>
-                        <textarea id="social-text-<?php echo $index; ?>" class="social-preview" data-items="<?php echo esc_attr( $block['items'] ); ?>" readonly><?php echo esc_textarea($block['text']); ?></textarea>
+                        <textarea id="social-text-<?php echo absint( $index ); ?>" class="social-preview" data-items="<?php echo esc_attr( $block['items'] ); ?>" readonly><?php echo esc_textarea($block['text']); ?></textarea>
                         <div class="social-template-editor" hidden>
                             <p class="template-hint">Use <code>[items]</code> where the current needed items should appear.<?php echo $is_pair ? ' This template is shared by all four "pair" posts above.' : ''; ?></p>
                             <textarea class="social-template-input" name="<?php echo esc_attr( $template_field ); ?>"><?php echo esc_textarea($block['template']); ?></textarea>
@@ -98,7 +98,7 @@ if (!empty($current_selection)) {
                 <table class="form-table list-rows" data-min-rows="3">
                     <?php foreach ( $always_include as $i => $value ): ?>
                         <tr class="list-row">
-                            <th scope="row" class="row-label">Item <?php echo $i + 1; ?></th>
+                            <th scope="row" class="row-label">Item <?php echo absint( $i + 1 ); ?></th>
                             <td>
                                 <?php shopping_list_clearable_input( "always_include[$i]", $value, 'regular-text', 'Enter item name' ); ?>
                             </td>
@@ -122,7 +122,7 @@ if (!empty($current_selection)) {
                 <table class="form-table list-rows" data-min-rows="3">
                     <?php foreach ( $not_needed as $i => $value ): ?>
                         <tr class="list-row">
-                            <th scope="row" class="row-label">Item <?php echo $i + 1; ?></th>
+                            <th scope="row" class="row-label">Item <?php echo absint( $i + 1 ); ?></th>
                             <td>
                                 <?php shopping_list_clearable_input( "not_needed[$i]", $value, 'regular-text', 'Enter item name' ); ?>
                             </td>
@@ -147,7 +147,7 @@ if (!empty($current_selection)) {
             <div class="random-items-grid" data-min-rows="3" data-min-cols="3">
                 <?php foreach ( $random_items as $r => $row ): ?>
                     <div class="grid-row" data-row-index="<?php echo esc_attr( $r ); ?>">
-                        <label class="row-label">Row <?php echo $r + 1; ?>:</label>
+                        <label class="row-label">Row <?php echo absint( $r + 1 ); ?>:</label>
                         <div class="grid-cells">
                             <?php foreach ( $row as $c => $value ): ?>
                                 <?php shopping_list_clearable_input(

@@ -2,9 +2,11 @@
 /**
  * Plugin Name: Shopping List
  * Description: Manages randomised item displays with administrative controls and weekly automated regeneration.
- * Version: 0.11.0
+ * Version: 0.11.1
  * Author: Aidan Ashby
  * Text Domain: shopping-list
+ * License: MIT
+ * License URI: https://opensource.org/licenses/MIT
  * Update URI: https://github.com/aidanashby/shopping-list
  */
 
@@ -14,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants
-define( 'SHOPPING_LIST_VERSION',     '0.11.0' );
+define( 'SHOPPING_LIST_VERSION',     '0.11.1' );
 define( 'SHOPPING_LIST_PLUGIN_FILE', __FILE__ );
 define( 'SHOPPING_LIST_PLUGIN_DIR',  plugin_dir_path( __FILE__ ) );
 define( 'SHOPPING_LIST_PLUGIN_URL',  plugin_dir_url( __FILE__ ) );
@@ -26,7 +28,7 @@ define( 'SHOPPING_LIST_SLOTS',       8 );
 /**
  * Main plugin class loader
  */
-function run_shopping_list() {
+function shopping_list_run() {
     require_once SHOPPING_LIST_PLUGIN_DIR . 'includes/class-shopping-list.php';
     $plugin = new Shopping_List();
     $plugin->run();
@@ -35,7 +37,7 @@ function run_shopping_list() {
 /**
  * Activation: set up default options, schedule cron, generate initial list
  */
-function activate_shopping_list() {
+function shopping_list_activate() {
     require_once SHOPPING_LIST_PLUGIN_DIR . 'includes/class-shopping-list-database.php';
     require_once SHOPPING_LIST_PLUGIN_DIR . 'includes/class-shopping-list-cron.php';
     require_once SHOPPING_LIST_PLUGIN_DIR . 'includes/class-shopping-list-rss.php';
@@ -51,16 +53,16 @@ function activate_shopping_list() {
 /**
  * Deactivation: clear scheduled cron events
  */
-function deactivate_shopping_list() {
+function shopping_list_deactivate() {
     require_once SHOPPING_LIST_PLUGIN_DIR . 'includes/class-shopping-list-cron.php';
     Shopping_List_Cron::clear_scheduled_events();
     Shopping_List_Cron::clear_daily_rss_snapshots();
 }
 
 // Bootstrap
-add_action( 'plugins_loaded', 'run_shopping_list' );
-register_activation_hook( __FILE__, 'activate_shopping_list' );
-register_deactivation_hook( __FILE__, 'deactivate_shopping_list' );
+add_action( 'plugins_loaded', 'shopping_list_run' );
+register_activation_hook( __FILE__, 'shopping_list_activate' );
+register_deactivation_hook( __FILE__, 'shopping_list_deactivate' );
 
 // RSS rewrite rules
 add_action( 'init', 'shopping_list_rss_init' );

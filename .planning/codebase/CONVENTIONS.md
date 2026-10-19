@@ -15,7 +15,7 @@
 - All classes prefixed with `Shopping_List_`
 
 **Functions (procedural):**
-- snake_case with plugin prefix: `run_shopping_list()`, `activate_shopping_list()`, `deactivate_shopping_list()`, `shopping_list_rss_init()`
+- snake_case with plugin prefix: `shopping_list_run()`, `shopping_list_activate()`, `shopping_list_deactivate()`, `shopping_list_rss_init()`
 
 **Methods:**
 - snake_case: `create_default_options()`, `generate_random_selection()`, `add_admin_menu()`, `process_form_submission()`

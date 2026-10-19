@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) || exit;
 /**
  * Cron management class
  */
@@ -44,7 +45,9 @@ class Shopping_List_Cron {
 
     public function regenerate_list() {
         Shopping_List_Database::generate_random_selection();
-        error_log('Shopping List: Weekly regeneration completed at ' . current_time('mysql'));
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            error_log('Shopping List: Weekly regeneration completed at ' . current_time('mysql'));
+        }
     }
 
     public static function regenerate_current_list() {
@@ -53,6 +56,8 @@ class Shopping_List_Cron {
 
     public static function take_rss_snapshot( $day ) {
         Shopping_List_RSS::take_snapshot( $day );
-        error_log( 'Shopping List: RSS snapshot taken for ' . $day . ' at ' . current_time( 'mysql' ) );
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            error_log( 'Shopping List: RSS snapshot taken for ' . $day . ' at ' . current_time( 'mysql' ) );
+        }
     }
 }

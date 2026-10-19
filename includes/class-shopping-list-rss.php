@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) || exit;
 
 class Shopping_List_RSS {
 
@@ -44,7 +45,7 @@ class Shopping_List_RSS {
 
         $site_url     = home_url();
         $site_name    = get_bloginfo( 'name' );
-        $current_date = date( 'D, d M Y H:i:s O' );
+        $current_date = gmdate( 'D, d M Y H:i:s O' );
 
         $list_html = '<ul>';
         foreach ( $current_selection as $item ) {
@@ -65,10 +66,10 @@ class Shopping_List_RSS {
 <item>
 <title>This week's food bank shopping list:</title>
 <link><?php echo esc_url( $site_url ); ?></link>
-<description><![CDATA[<?php echo $list_html; ?>]]></description>
-<content:encoded><![CDATA[<?php echo $list_html; ?>]]></content:encoded>
+<description><![CDATA[<?php echo wp_kses_post( $list_html ); ?>]]></description>
+<content:encoded><![CDATA[<?php echo wp_kses_post( $list_html ); ?>]]></content:encoded>
 <pubDate><?php echo esc_html( $current_date ); ?></pubDate>
-<guid><?php echo esc_url( $site_url ); ?>/shopping-list-<?php echo esc_html( date( 'Y-m-d' ) ); ?></guid>
+<guid><?php echo esc_url( $site_url ); ?>/shopping-list-<?php echo esc_html( gmdate( 'Y-m-d' ) ); ?></guid>
 </item>
 
 </channel>
@@ -104,7 +105,7 @@ class Shopping_List_RSS {
         }
         $list_html .= '</ul>';
 
-        $guid_date = date( 'Y-m-d', strtotime( $pub_date ) );
+        $guid_date = gmdate( 'Y-m-d', strtotime( $pub_date ) );
 
         echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         ?>
@@ -119,8 +120,8 @@ class Shopping_List_RSS {
 <item>
 <title>This week's food bank shopping list:</title>
 <link><?php echo esc_url( $site_url ); ?></link>
-<description><![CDATA[<?php echo $list_html; ?>]]></description>
-<content:encoded><![CDATA[<?php echo $list_html; ?>]]></content:encoded>
+<description><![CDATA[<?php echo wp_kses_post( $list_html ); ?>]]></description>
+<content:encoded><![CDATA[<?php echo wp_kses_post( $list_html ); ?>]]></content:encoded>
 <pubDate><?php echo esc_html( $pub_date ); ?></pubDate>
 <guid><?php echo esc_url( $site_url ); ?>/shopping-list-<?php echo esc_html( $day ); ?>-<?php echo esc_html( $guid_date ); ?></guid>
 </item>

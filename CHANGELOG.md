@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.11.1] - 2026-10-19
+- Added `License: MIT` to the plugin header, matching the bundled licence file.
+- The three list settings now sanitise their values when saved through the Settings API, as the plugin's own form already did.
+- The weekly regeneration and daily RSS snapshot cron jobs only write to the PHP error log when `WP_DEBUG` is on.
+- Renamed the bootstrap functions to `shopping_list_run()`, `shopping_list_activate()` and `shopping_list_deactivate()` so they can't collide with another plugin.
+- RSS feeds use `gmdate()` instead of `date()`. Output is unchanged.
+- Escaped the remaining admin-page and feed output flagged by Plugin Check, added direct-access guards to the class files, and normalised the frontend class's line endings.
+
 ## [0.11.0] - 2026-10-02
 - Widened the randomly-selected grid's columns from 160px to 220px.
 - Saving now removes blank rows from Always Include and Not Needed, and blank rows and columns from the randomly-selected grid (keeping the 3-row / 3×3 minimum).

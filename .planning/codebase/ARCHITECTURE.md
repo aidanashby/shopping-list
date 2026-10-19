@@ -17,7 +17,7 @@
 **Entry Point / Bootstrap:**
 - Purpose: Register WordPress hooks, define constants, bootstrap the plugin
 - Location: `shopping-list.php`
-- Contains: Plugin header, constants, activation/deactivation hooks, `run_shopping_list()` loader, RSS init hook
+- Contains: Plugin header, constants, activation/deactivation hooks, `shopping_list_run()` loader, RSS init hook
 - Depends on: All `includes/` classes (loaded on demand)
 - Used by: WordPress core
 
@@ -26,7 +26,7 @@
 - Location: `includes/class-shopping-list.php`
 - Contains: `Shopping_List` class with `load_dependencies()`, `define_admin_hooks()`, `define_public_hooks()`, `define_cron_hooks()`, `define_update_hooks()`
 - Depends on: All other classes in `includes/`
-- Used by: `shopping-list.php` via `run_shopping_list()`
+- Used by: `shopping-list.php` via `shopping_list_run()`
 
 **Data Layer:**
 - Purpose: All read/write operations against WordPress options; list generation logic
@@ -121,15 +121,15 @@
 **Plugin Bootstrap:**
 - Location: `shopping-list.php`
 - Triggers: WordPress `plugins_loaded` action
-- Responsibilities: Define constants, register activation/deactivation hooks, call `run_shopping_list()`
+- Responsibilities: Define constants, register activation/deactivation hooks, call `shopping_list_run()`
 
 **Activation:**
-- Location: `shopping-list.php` → `activate_shopping_list()`
+- Location: `shopping-list.php` → `shopping_list_activate()`
 - Triggers: Plugin activation in wp-admin
 - Responsibilities: Create default options, schedule cron, generate initial list, flush rewrite rules
 
 **Deactivation:**
-- Location: `shopping-list.php` → `deactivate_shopping_list()`
+- Location: `shopping-list.php` → `shopping_list_deactivate()`
 - Triggers: Plugin deactivation in wp-admin
 - Responsibilities: Clear scheduled cron events
 

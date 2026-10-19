@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) || exit;
 /**
  * Admin interface class
  */
@@ -48,9 +49,9 @@ class Shopping_List_Admin {
     }
 
     public function admin_init() {
-        register_setting( 'shopping_list_settings', 'shopping_list_always_include' );
-        register_setting( 'shopping_list_settings', 'shopping_list_not_needed' );
-        register_setting( 'shopping_list_settings', 'shopping_list_random_items' );
+        register_setting( 'shopping_list_settings', 'shopping_list_always_include', array( 'sanitize_callback' => array( 'Shopping_List_Database', 'compact_list' ) ) );
+        register_setting( 'shopping_list_settings', 'shopping_list_not_needed', array( 'sanitize_callback' => array( 'Shopping_List_Database', 'compact_list' ) ) );
+        register_setting( 'shopping_list_settings', 'shopping_list_random_items', array( 'sanitize_callback' => array( 'Shopping_List_Database', 'compact_grid' ) ) );
 
         add_settings_section(
             'shopping_list_always_section',
@@ -75,7 +76,7 @@ class Shopping_List_Admin {
     }
 
     public function always_section_callback() {
-        echo '<p>These items will always appear first in your shopping list (maximum ' . SHOPPING_LIST_SLOTS . ' items):</p>';
+        echo '<p>These items will always appear first in your shopping list (maximum ' . absint( SHOPPING_LIST_SLOTS ) . ' items):</p>';
     }
 
     public function not_needed_section_callback() {

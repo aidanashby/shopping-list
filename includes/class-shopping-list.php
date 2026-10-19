@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) || exit;
 /**
  * Main plugin class — wires all subsystems together via WordPress hooks
  */
