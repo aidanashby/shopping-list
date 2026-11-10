@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Shopping List
  * Description: Manages randomised item displays with administrative controls and weekly automated regeneration.
- * Version: 0.12.0
+ * Version: 0.13.0
  * Author: Aidan Ashby
  * Text Domain: shopping-list
  * License: MIT
@@ -16,14 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants
-define( 'SHOPPING_LIST_VERSION',     '0.12.0' );
+define( 'SHOPPING_LIST_VERSION',     '0.13.0' );
 define( 'SHOPPING_LIST_PLUGIN_FILE', __FILE__ );
 define( 'SHOPPING_LIST_PLUGIN_DIR',  plugin_dir_path( __FILE__ ) );
 define( 'SHOPPING_LIST_PLUGIN_URL',  plugin_dir_url( __FILE__ ) );
 define( 'SHOPPING_LIST_GITHUB_REPO', 'aidanashby/shopping-list' );
-
-// List size constants
-define( 'SHOPPING_LIST_SLOTS',       8 );
 
 /**
  * Main plugin class loader

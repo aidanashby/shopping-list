@@ -63,6 +63,23 @@ class Shopping_List_Database {
         return $rows;
     }
 
+    const DEFAULT_MAX_ITEMS = 8;
+    const MIN_MAX_ITEMS     = 1;
+    const MAX_MAX_ITEMS     = 50;
+
+    // Clamped on read as well as on save, so a bad stored value can never empty or flood the list.
+    public static function get_max_items() {
+        return self::clamp_max_items( get_option( 'shopping_list_max_items', self::DEFAULT_MAX_ITEMS ) );
+    }
+
+    public static function clamp_max_items( $value ) {
+        return max( self::MIN_MAX_ITEMS, min( self::MAX_MAX_ITEMS, absint( $value ) ) );
+    }
+
+    public static function update_max_items( $value ) {
+        return update_option( 'shopping_list_max_items', self::clamp_max_items( $value ) );
+    }
+
     public static function get_current_selection() {
         return get_option( 'shopping_list_current_selection', array() );
     }
@@ -176,8 +193,9 @@ class Shopping_List_Database {
         // Lowercase list of always-include items — used to prevent duplicates in random picks
         $always_include_lowercase = array_map( 'strtolower', array_map( 'trim', $always_include_filtered ) );
 
-        $selection       = array_values( $always_include_filtered );
-        $remaining_slots = SHOPPING_LIST_SLOTS - count( $selection );
+        $max_items       = self::get_max_items();
+        $selection       = array_slice( array_values( $always_include_filtered ), 0, $max_items );
+        $remaining_slots = $max_items - count( $selection );
 
         if ( $remaining_slots > 0 ) {
             $available_random = array();

@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.13.0] - 2026-11-10
+- Added a List Size setting for the maximum number of items in the shopping list (1 to 50, default 8), replacing the fixed limit of 8. Always Include items beyond the maximum are now left out instead of making the list longer.
+- The Social Media Posts panel is collapsed by default. Click its heading to expand it.
+
 ## [0.12.0] - 2026-11-10
 - Rows in Always Include, Not Needed and the randomly-selected grid can be reordered by dragging their label.
 - "Save Settings" is now the main button and keeps the randomly selected items, while applying any new order or edits to the list. "Save & Regenerate List" is now a secondary button and picks new random items every time, even when nothing else changed.

@@ -67,8 +67,8 @@ if (!empty($current_selection)) {
         <?php wp_nonce_field('shopping_list_settings', 'shopping_list_nonce'); ?>
 
         <?php if (!empty($social_texts)): ?>
-        <div class="social-media-blocks">
-            <h2>Social Media Posts</h2>
+        <details class="social-media-blocks">
+            <summary><h2>Social Media Posts</h2></summary>
             <div class="social-blocks-container">
                 <?php foreach ($social_texts as $index => $block):
                     $is_pair = $index > 0;
@@ -88,8 +88,15 @@ if (!empty($current_selection)) {
                     </div>
                 <?php endforeach; ?>
             </div>
-        </div>
+        </details>
         <?php endif; ?>
+
+        <div class="shopping-list-section">
+            <h2><span class="dashicons dashicons-list-view"></span> List Size</h2>
+            <label for="max_items">Maximum number of items in the shopping list:</label>
+            <input type="number" id="max_items" name="max_items" class="small-text" min="<?php echo absint( Shopping_List_Database::MIN_MAX_ITEMS ); ?>" max="<?php echo absint( Shopping_List_Database::MAX_MAX_ITEMS ); ?>" step="1" required value="<?php echo absint( Shopping_List_Database::get_max_items() ); ?>" />
+            <p class="description">Always Include items fill the list first, then randomly selected items fill what is left. Changing this takes effect when you save.</p>
+        </div>
 
         <div class="side-by-side-sections">
             <div class="shopping-list-section half-width">

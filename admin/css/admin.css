@@ -36,7 +36,31 @@
     color: var(--sl-accent);
 }
 
-/* Social Media Blocks */
+/* Social Media Blocks: collapsed <details>, click the heading to open */
+.social-media-blocks summary {
+    cursor: pointer;
+    list-style: none;
+}
+
+.social-media-blocks summary::-webkit-details-marker {
+    display: none;
+}
+
+.social-media-blocks summary h2 {
+    margin-bottom: 0;
+}
+
+.social-media-blocks summary h2::before {
+    content: "\f139";
+    font-family: dashicons;
+    color: var(--sl-accent);
+    transition: transform 0.15s;
+}
+
+.social-media-blocks[open] summary h2::before {
+    transform: rotate(90deg);
+}
+
 .social-blocks-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

@@ -76,7 +76,7 @@ class Shopping_List_Admin {
     }
 
     public function always_section_callback() {
-        echo '<p>These items will always appear first in your shopping list (maximum ' . absint( SHOPPING_LIST_SLOTS ) . ' items):</p>';
+        echo '<p>These items will always appear first in your shopping list (maximum ' . absint( Shopping_List_Database::get_max_items() ) . ' items):</p>';
     }
 
     public function not_needed_section_callback() {
@@ -120,6 +120,9 @@ class Shopping_List_Admin {
             ? wp_unslash( $_POST['social_template_pair'] )
             : Shopping_List_Database::get_social_template_pair();
 
+        if ( isset( $_POST['max_items'] ) ) {
+            Shopping_List_Database::update_max_items( wp_unslash( $_POST['max_items'] ) );
+        }
         Shopping_List_Database::update_always_include_items( $always_include );
         Shopping_List_Database::update_not_needed_items( $not_needed );
         Shopping_List_Database::update_random_items( $random_items );
@@ -145,11 +148,12 @@ class Shopping_List_Admin {
                 return ! empty( trim( $item ) );
             } ) );
 
-            if ( $always_include_count >= SHOPPING_LIST_SLOTS ) {
+            $max_items = Shopping_List_Database::get_max_items();
+            if ( $always_include_count >= $max_items ) {
                 add_settings_error(
                     'shopping_list_messages',
                     'shopping_list_capacity',
-                    'All ' . SHOPPING_LIST_SLOTS . ' slots are filled by Always Include items — no randomly selected items will be added to the list.',
+                    'Always Include items fill all ' . $max_items . ' slots, so no randomly selected items are added. Any beyond the first ' . $max_items . ' are left out.',
                     'warning'
                 );
             }

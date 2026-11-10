@@ -31,6 +31,7 @@ delete_option( 'shopping_list_random_items' );
 delete_option( 'shopping_list_current_selection' );
 delete_option( 'shopping_list_social_template_intro' );
 delete_option( 'shopping_list_social_template_pair' );
+delete_option( 'shopping_list_max_items' );
 
 // Remove updater cache and Plugin Update Checker state
 delete_site_transient( 'shopping_list_github_release' );
