@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.12.0] - 2026-11-10
+- Rows in Always Include, Not Needed and the randomly-selected grid can be reordered by dragging their label.
+- "Save Settings" is now the main button and keeps the randomly selected items, while applying any new order or edits to the list. "Save & Regenerate List" is now a secondary button and picks new random items every time, even when nothing else changed.
+- Randomly selected items now appear in grid row order instead of a shuffled order, so dragging grid rows sets their order on the front end.
+
 ## [0.11.1] - 2026-10-19
 - Added `License: MIT` to the plugin header, matching the bundled licence file.
 - The three list settings now sanitise their values when saved through the Settings API, as the plugin's own form already did.

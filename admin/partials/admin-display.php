@@ -184,6 +184,9 @@ if (!empty($current_selection)) {
             </template>
         </div>
 
-        <?php submit_button('Save Settings & Regenerate List'); ?>
+        <p class="submit">
+            <?php submit_button( 'Save Settings', 'primary', 'submit', false ); ?>
+            <?php submit_button( 'Save & Regenerate List', 'secondary', 'regenerate', false ); ?>
+        </p>
     </form>
 </div>

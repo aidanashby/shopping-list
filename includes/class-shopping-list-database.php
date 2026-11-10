@@ -151,7 +151,10 @@ class Shopping_List_Database {
         return update_option( 'shopping_list_social_template_pair', sanitize_textarea_field( $template ) );
     }
 
-    public static function generate_random_selection() {
+    // $keep_current: rebuild in the tables' current order but reuse the random items already
+    // chosen instead of picking new ones (a plain Save). Freed slots are not refilled.
+    public static function generate_random_selection( $keep_current = false ) {
+        $current_lowercase = array_map( 'strtolower', array_map( 'trim', self::get_current_selection() ) );
         $always_include = self::get_always_include_items();
         $random_items   = self::get_random_items();
         $not_needed     = self::get_not_needed_items();
@@ -179,23 +182,37 @@ class Shopping_List_Database {
         if ( $remaining_slots > 0 ) {
             $available_random = array();
 
-            foreach ( $random_items as $row ) {
-                // From each row, pick one item — excluding not-needed and already-included items
-                $row_candidates = array_filter( $row, function ( $item ) use ( $not_needed_lowercase, $always_include_lowercase ) {
+            foreach ( $random_items as $row_index => $row ) {
+                // From each row, pick one item, excluding not-needed and already-included items
+                $row_candidates = array_values( array_filter( $row, function ( $item ) use ( $not_needed_lowercase, $always_include_lowercase ) {
                     $trimmed = trim( $item );
                     $lower   = strtolower( $trimmed );
                     return ! empty( $trimmed )
                         && ! in_array( $lower, $not_needed_lowercase, true )
                         && ! in_array( $lower, $always_include_lowercase, true );
-                } );
+                } ) );
+
+                if ( $keep_current ) {
+                    $row_candidates = array_values( array_filter( $row_candidates, function ( $item ) use ( $current_lowercase ) {
+                        return in_array( strtolower( trim( $item ) ), $current_lowercase, true );
+                    } ) );
+                }
 
                 if ( ! empty( $row_candidates ) ) {
-                    $available_random[] = $row_candidates[ array_rand( $row_candidates ) ];
+                    $available_random[ $row_index ] = $keep_current ? $row_candidates[0] : $row_candidates[ array_rand( $row_candidates ) ];
                 }
             }
 
-            shuffle( $available_random );
-            $selection = array_merge( $selection, array_slice( $available_random, 0, $remaining_slots ) );
+            // When rows outnumber slots, choose which rows are used at random, then show the
+            // chosen items in grid row order so dragging rows sets the front-end order.
+            if ( ! $keep_current ) {
+                $row_keys = array_keys( $available_random );
+                shuffle( $row_keys );
+                $available_random = array_intersect_key( $available_random, array_flip( array_slice( $row_keys, 0, $remaining_slots ) ) );
+                ksort( $available_random );
+            }
+
+            $selection = array_merge( $selection, array_slice( array_values( $available_random ), 0, $remaining_slots ) );
         }
 
         self::update_current_selection( $selection );

@@ -32,7 +32,7 @@ class Shopping_List_Admin {
         wp_enqueue_script(
             $this->plugin_name,
             SHOPPING_LIST_PLUGIN_URL . 'admin/js/admin.js',
-            array( 'jquery' ),
+            array( 'jquery', 'jquery-ui-sortable' ),
             $this->version,
             true
         );
@@ -92,7 +92,7 @@ class Shopping_List_Admin {
             return;
         }
 
-        if ( isset( $_POST['submit'] ) && check_admin_referer( 'shopping_list_settings', 'shopping_list_nonce' ) ) {
+        if ( ( isset( $_POST['submit'] ) || isset( $_POST['regenerate'] ) ) && check_admin_referer( 'shopping_list_settings', 'shopping_list_nonce' ) ) {
             $this->process_form_submission();
         }
 
@@ -120,13 +120,17 @@ class Shopping_List_Admin {
             ? wp_unslash( $_POST['social_template_pair'] )
             : Shopping_List_Database::get_social_template_pair();
 
-        $always_updated    = Shopping_List_Database::update_always_include_items( $always_include );
-        $not_needed_updated = Shopping_List_Database::update_not_needed_items( $not_needed );
-        $random_updated    = Shopping_List_Database::update_random_items( $random_items );
+        Shopping_List_Database::update_always_include_items( $always_include );
+        Shopping_List_Database::update_not_needed_items( $not_needed );
+        Shopping_List_Database::update_random_items( $random_items );
         Shopping_List_Database::update_social_template_intro( $social_template_intro );
         Shopping_List_Database::update_social_template_pair( $social_template_pair );
 
-        if ( $always_updated || $not_needed_updated || $random_updated ) {
+        // Both buttons rebuild the list in table order; only Regenerate picks new random items.
+        if ( ! isset( $_POST['regenerate'] ) ) {
+            Shopping_List_Database::generate_random_selection( true );
+            add_settings_error( 'shopping_list_messages', 'shopping_list_message', 'Settings saved. The current list was kept.', 'updated' );
+        } else {
             Shopping_List_Database::generate_random_selection();
 
             add_settings_error(
@@ -149,13 +153,6 @@ class Shopping_List_Admin {
                     'warning'
                 );
             }
-        } else {
-            add_settings_error(
-                'shopping_list_messages',
-                'shopping_list_message',
-                'Error saving settings. Please try again.',
-                'error'
-            );
         }
     }
 

@@ -246,6 +246,32 @@ jQuery(document).ready(function($) {
         $(this).closest('.shopping-list-section').find('.random-items-grid input').val('').trigger('input');
     });
 
+    // --- Drag to reorder rows (form field order is DOM order, so saving keeps it) ---
+
+    $('.list-rows').sortable({
+        items: '> tbody > .list-row',
+        handle: '.row-label',
+        axis: 'y',
+        placeholder: 'sortable-placeholder',
+        helper: function(e, $tr) {
+            // Keep cell widths while the table row is detached
+            $tr.children().each(function() { $(this).width($(this).width()); });
+            return $tr;
+        },
+        start: function(e, ui) { ui.placeholder.height(ui.item.height()).html('<td colspan="2"></td>'); },
+        stop: function(e, ui) { ui.item.children().css('width', ''); },
+        update: function() { renumberListRows($(this)); }
+    });
+
+    $('.random-items-grid').sortable({
+        items: '> .grid-row',
+        handle: '.row-label',
+        axis: 'y',
+        placeholder: 'sortable-placeholder',
+        start: function(e, ui) { ui.placeholder.height(ui.item.outerHeight()); },
+        update: function() { renumberGrid($(this)); }
+    });
+
     // --- Multi-line paste: one line per cell, going down the column ---
 
     // Returns the input in the same column of the next row, inserting a new

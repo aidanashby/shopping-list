@@ -291,3 +291,25 @@
         padding: 16px;
     }
 }
+
+/* Drag handle: the row label itself, so renumbering via .text() keeps working */
+.list-rows .row-label,
+.grid-row .row-label {
+    cursor: move;
+    user-select: none;
+}
+
+.list-rows .row-label::before,
+.grid-row .row-label::before {
+    content: "\f333";
+    font-family: dashicons;
+    margin-right: 4px;
+    vertical-align: middle;
+    color: var(--sl-muted);
+}
+
+.sortable-placeholder {
+    background: #f0f6fc;
+    outline: 1px dashed #72aee6;
+    visibility: visible !important;
+}
