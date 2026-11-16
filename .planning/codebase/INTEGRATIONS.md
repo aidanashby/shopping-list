@@ -78,7 +78,7 @@
 - Generated: On-demand via WordPress rewrite rule and `template_redirect` hook
 - Language declared: `en-GB`
 - Implementation: `includes/class-shopping-list-rss.php`
-- Consumer: Intended for MailerLite or similar RSS-to-email automation
+- Consumer: Mailchimp RSS campaigns
 
 ## Environment Configuration
 

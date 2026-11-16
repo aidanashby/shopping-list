@@ -9,7 +9,7 @@ A WordPress plugin that generates and manages randomised item displays with week
 - Admin interface for managing items and regeneration options, with freely resizable lists (add or remove rows/columns, no fixed limits) and a settings link on the Plugins screen.
 - Editable social media post templates — one for the whole-week post, one shared template for the daily posts — using an `[items]` token to insert the current list.
 - Live RSS feed at `/shopping-list-feed.rss` reflecting the current list.
-- Day-specific RSS feeds (`/shopping-list-feed-monday.rss` through `/shopping-list-feed-sunday.rss`), each updated at 12:00am (site timezone) on its named day with a fixed `pubDate` — suitable for time-triggered automations in tools like MailerLite.
+- Day-specific RSS feeds (`/shopping-list-feed-monday.rss` through `/shopping-list-feed-sunday.rss`), each updated at 12:00am (site timezone) on its named day with a fixed `pubDate` — suitable for time-triggered automations such as Mailchimp RSS campaigns.
 - Clean, modular structure using admin and includes components.
 
 ## Requirements
