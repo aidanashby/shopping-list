@@ -5,7 +5,7 @@ A WordPress plugin that generates and manages randomised item displays with week
 ## Features
 
 - Randomised item selection logic with configurable behaviour.
-- Automatic weekly regeneration of item lists every Monday at 6:00am.
+- Automatic weekly regeneration of item lists every Monday at 12:00am (site timezone).
 - Admin interface for managing items and regeneration options, with freely resizable lists (add or remove rows/columns, no fixed limits) and a settings link on the Plugins screen.
 - Editable social media post templates — one for the whole-week post, one shared template for the daily posts — using an `[items]` token to insert the current list.
 - Live RSS feed at `/shopping-list-feed.rss` reflecting the current list.
@@ -37,7 +37,7 @@ A WordPress plugin that generates and manages randomised item displays with week
 | `/shopping-list-feed-saturday.rss` | Saturdays at 6:00am |
 | `/shopping-list-feed-sunday.rss` | Sundays at 6:00am |
 
-Monday's feed updates at 6:01am to guarantee the weekly list regeneration (6:00am) runs first.
+The weekly list regeneration runs at 12:00am on Monday, before Monday's feed updates.
 
 Each day feed stores a snapshot with a fixed `pubDate` of "that day at 06:00:00" in the site timezone. The pubDate does not change between requests — only when the day's cron fires.
 
