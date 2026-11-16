@@ -19,7 +19,7 @@ Admins can update the food bank's urgent needs in one place and have that update
 - ✓ Admin settings page with three input lists: Always Include (8 slots), Randomly Selected Needed Items (40 rows × 4 columns), Not Needed Items (8 slots)
 - ✓ Immediate list regeneration on admin save
 - ✓ Weekly automated regeneration via WP-Cron (Mondays 12 AM, site timezone)
-- ✓ RSS 2.0 feed at `/shopping-list-feed.rss` serving the current selection (en-GB, for MailerLite RSS-to-email)
+- ✓ RSS 2.0 feed at `/shopping-list-feed.rss` serving the current selection (en-GB, for Mailchimp RSS campaigns)
 - ✓ Social media copy blocks at top of settings page — one Monday-morning post + per-pair posts for each 2-item chunk; copy-to-clipboard buttons
 - ✓ GitHub Releases auto-update mechanism (hooks into WordPress plugin update API)
 - ✓ Clean uninstall (removes all options on plugin deletion)
@@ -53,7 +53,7 @@ Admins can update the food bank's urgent needs in one place and have that update
 - **Author/repo:** Aidan Ashby — `aidanashby/shopping-list` on GitHub
 - **Plugin architecture:** Single entry point (`shopping-list.php`), six classes in `includes/`, admin assets in `admin/`, no Composer dependencies, no autoloader
 - **Data storage:** WordPress options table only — four keys (`shopping_list_always_include`, `shopping_list_not_needed`, `shopping_list_random_items`, `shopping_list_current_selection`)
-- **RSS consumer:** MailerLite RSS-to-email automation reads `/shopping-list-feed.rss`
+- **RSS consumer:** Mailchimp RSS campaigns read the plugin's feeds (`/shopping-list-feed.rss` and the day feeds `/shopping-list-feed-<day>.rss`)
 - **Current codebase state:** Core features work but the codebase has several critical integrity issues (see Active requirements) that risk silent failures in auto-updates and list generation
 
 ## Constraints
