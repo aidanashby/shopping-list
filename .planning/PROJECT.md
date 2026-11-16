@@ -18,7 +18,7 @@ Admins can update the food bank's urgent needs in one place and have that update
 - ✓ `[noshop_list]` shortcode — displays the Not Needed Items list in order
 - ✓ Admin settings page with three input lists: Always Include (8 slots), Randomly Selected Needed Items (40 rows × 4 columns), Not Needed Items (8 slots)
 - ✓ Immediate list regeneration on admin save
-- ✓ Weekly automated regeneration via WP-Cron (Mondays 6 AM)
+- ✓ Weekly automated regeneration via WP-Cron (Mondays 12 AM, site timezone)
 - ✓ RSS 2.0 feed at `/shopping-list-feed.rss` serving the current selection (en-GB, for MailerLite RSS-to-email)
 - ✓ Social media copy blocks at top of settings page — one Monday-morning post + per-pair posts for each 2-item chunk; copy-to-clipboard buttons
 - ✓ GitHub Releases auto-update mechanism (hooks into WordPress plugin update API)

@@ -133,7 +133,7 @@ class Shopping_List_RSS {
 
     /**
      * Called by each day's cron event. Stores a snapshot of the current list
-     * with a fixed pub_date of "today at 06:00:00" in the site timezone.
+     * with a fixed pub_date of "today at 00:00:00" in the site timezone.
      *
      * @param string|null $pub_date Override pub_date (used by init_all_snapshots).
      */
@@ -169,7 +169,7 @@ class Shopping_List_RSS {
     private static function compute_today_pub_date() {
         $tz    = wp_timezone();
         $now   = new DateTime( 'now', $tz );
-        $fixed = new DateTime( $now->format( 'Y-m-d' ) . ' 06:00:00', $tz );
+        $fixed = new DateTime( $now->format( 'Y-m-d' ) . ' 00:00:00', $tz );
         return $fixed->format( 'D, d M Y H:i:s O' );
     }
 
@@ -185,7 +185,7 @@ class Shopping_List_RSS {
             $date_str = ( new DateTime( '@' . $ts ) )->setTimezone( $tz )->format( 'Y-m-d' );
         }
 
-        $fixed = new DateTime( $date_str . ' 06:00:00', $tz );
+        $fixed = new DateTime( $date_str . ' 00:00:00', $tz );
         return $fixed->format( 'D, d M Y H:i:s O' );
     }
 }

@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.14.0] - 2026-11-16
+- The weekly regeneration of the randomly selected items now runs at 12:00am on Monday in the site's timezone, instead of 6:00am UTC.
+- The day-specific RSS feeds now update at 12:00am on their day in the site's timezone (Monday at 12:01am, after regeneration), instead of 6:00am UTC. Their fixed `pubDate` is now 00:00:00 instead of 06:00:00.
+- Scheduled events move back to their set time on the next page load after a clock change shifts them by an hour. Existing sites move their 6:00am events the same way after updating.
+
 ## [0.13.0] - 2026-11-10
 - Added a List Size setting for the maximum number of items in the shopping list (1 to 50, default 8), replacing the fixed limit of 8. Always Include items beyond the maximum are now left out instead of making the list longer.
 - The Social Media Posts panel is collapsed by default. Click its heading to expand it.

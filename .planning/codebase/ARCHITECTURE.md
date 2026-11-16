@@ -73,7 +73,7 @@
 ## Data Flow
 
 **Weekly List Generation:**
-1. `Shopping_List_Cron::regenerate_list()` fires on `shopping_list_weekly_regenerate` cron event (Mondays 6 AM)
+1. `Shopping_List_Cron::regenerate_list()` fires on `shopping_list_weekly_regenerate` cron event (Mondays 12 AM, site timezone)
 2. Calls `Shopping_List_Database::generate_random_selection()`
 3. Reads `shopping_list_always_include`, `shopping_list_random_items`, `shopping_list_not_needed` from options
 4. Builds selection: always-include items first (up to 8 total), remainder filled from one random item per row of the 40×4 random item matrix, excluding not-needed items
