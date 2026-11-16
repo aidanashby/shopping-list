@@ -39,7 +39,7 @@
 
 **WordPress Cron:**
 - Event: `shopping_list_weekly_regenerate`
-- Schedule: Weekly, first run next Monday at 06:00
+- Schedule: Weekly, next Monday at 00:00 site time; realigned on `init` by `Shopping_List_Cron::realign_events()`
 - Action: Calls `Shopping_List_Database::generate_random_selection()`
 - Implementation: `includes/class-shopping-list-cron.php`
 

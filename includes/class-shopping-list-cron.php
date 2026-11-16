@@ -7,47 +7,50 @@ class Shopping_List_Cron {
 
     private static $days = array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
 
-    // Identifies the current regeneration time. Change it whenever the time
-    // changes so existing sites move their scheduled event on the next load.
-    const REGEN_SCHEDULE_ID = 'mon-0000';
+    const REGEN_HOOK = 'shopping_list_weekly_regenerate';
 
-    public static function schedule_weekly_regeneration() {
-        if ( ! wp_next_scheduled( 'shopping_list_weekly_regenerate' ) ) {
-            // Next Monday at 12:00am in the site's timezone.
-            $start = new DateTime( 'next monday 00:00', wp_timezone() );
-            wp_schedule_event( $start->getTimestamp(), 'weekly', 'shopping_list_weekly_regenerate' );
-        }
-        update_option( 'shopping_list_regen_schedule', self::REGEN_SCHEDULE_ID );
+    /**
+     * Timestamp of the next given weekday at the given time in the site's timezone.
+     */
+    private static function next_local( $day, $time ) {
+        $dt = new DateTime( 'next ' . $day . ' ' . $time, wp_timezone() );
+        return $dt->getTimestamp();
     }
 
     /**
-     * Move an event scheduled under an earlier regeneration time to the current one.
+     * Each event's hook mapped to its weekday and site-time H:i.
+     * Lists regenerate at 12:00 AM Monday. Each day feed snapshots at 12:00 AM
+     * on its day, except Monday at 12:01 AM so regeneration always runs first.
      */
-    public static function maybe_reschedule_weekly_regeneration() {
-        if ( get_option( 'shopping_list_regen_schedule' ) === self::REGEN_SCHEDULE_ID ) {
-            return;
+    private static function expected_times() {
+        $times = array( self::REGEN_HOOK => array( 'monday', '00:00' ) );
+        foreach ( self::$days as $day ) {
+            $times[ 'shopping_list_rss_snapshot_' . $day ] = array( $day, 'monday' === $day ? '00:01' : '00:00' );
         }
-        self::clear_scheduled_events();
-        self::schedule_weekly_regeneration();
+        return $times;
+    }
+
+    private static function schedule( $hook ) {
+        $times = self::expected_times();
+        if ( ! wp_next_scheduled( $hook ) ) {
+            wp_schedule_event( self::next_local( $times[ $hook ][0], $times[ $hook ][1] ), 'weekly', $hook );
+        }
+    }
+
+    public static function schedule_weekly_regeneration() {
+        self::schedule( self::REGEN_HOOK );
     }
 
     public static function clear_scheduled_events() {
-        $timestamp = wp_next_scheduled('shopping_list_weekly_regenerate');
-        if ($timestamp) {
-            wp_unschedule_event($timestamp, 'shopping_list_weekly_regenerate');
+        $timestamp = wp_next_scheduled( self::REGEN_HOOK );
+        if ( $timestamp ) {
+            wp_unschedule_event( $timestamp, self::REGEN_HOOK );
         }
     }
 
     public static function schedule_daily_rss_snapshots() {
         foreach ( self::$days as $day ) {
-            $hook = 'shopping_list_rss_snapshot_' . $day;
-            if ( ! wp_next_scheduled( $hook ) ) {
-                // Monday at 6:01 AM, kept from when list regeneration ran at 6:00 AM.
-                // Regeneration now runs at 12:00 AM, so it still comes first.
-                $time_str   = ( 'monday' === $day ) ? 'next Monday 6:01 AM' : 'next ' . ucfirst( $day ) . ' 6:00 AM';
-                $start_time = strtotime( $time_str );
-                wp_schedule_event( $start_time, 'weekly', $hook );
-            }
+            self::schedule( 'shopping_list_rss_snapshot_' . $day );
         }
     }
 
@@ -58,6 +61,33 @@ class Shopping_List_Cron {
             if ( $timestamp ) {
                 wp_unschedule_event( $timestamp, $hook );
             }
+        }
+    }
+
+    /**
+     * Keep every event on its weekday and site-time H:i. WP-Cron repeats
+     * 'weekly' events every 604,800 seconds, so a clock change shifts them by
+     * an hour; this also moves events scheduled by older versions (6:00 AM UTC).
+     * Overdue events are left alone so a pending run is never skipped.
+     */
+    public static function realign_events() {
+        $tz  = wp_timezone();
+        $now = time();
+        foreach ( self::expected_times() as $hook => $when ) {
+            $timestamp = wp_next_scheduled( $hook );
+            if ( ! $timestamp ) {
+                self::schedule( $hook );
+                continue;
+            }
+            if ( $timestamp <= $now ) {
+                continue;
+            }
+            $local = ( new DateTime( '@' . $timestamp ) )->setTimezone( $tz );
+            if ( strtolower( $local->format( 'l' ) ) === $when[0] && $local->format( 'H:i' ) === $when[1] ) {
+                continue;
+            }
+            wp_unschedule_event( $timestamp, $hook );
+            wp_schedule_event( self::next_local( $when[0], $when[1] ), 'weekly', $hook );
         }
     }
 

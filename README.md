@@ -9,7 +9,7 @@ A WordPress plugin that generates and manages randomised item displays with week
 - Admin interface for managing items and regeneration options, with freely resizable lists (add or remove rows/columns, no fixed limits) and a settings link on the Plugins screen.
 - Editable social media post templates — one for the whole-week post, one shared template for the daily posts — using an `[items]` token to insert the current list.
 - Live RSS feed at `/shopping-list-feed.rss` reflecting the current list.
-- Day-specific RSS feeds (`/shopping-list-feed-monday.rss` through `/shopping-list-feed-sunday.rss`), each updated at 6:00am on its named day with a fixed `pubDate` — suitable for time-triggered automations in tools like MailerLite.
+- Day-specific RSS feeds (`/shopping-list-feed-monday.rss` through `/shopping-list-feed-sunday.rss`), each updated at 12:00am (site timezone) on its named day with a fixed `pubDate` — suitable for time-triggered automations in tools like MailerLite.
 - Clean, modular structure using admin and includes components.
 
 ## Requirements
@@ -29,17 +29,17 @@ A WordPress plugin that generates and manages randomised item displays with week
 | URL | Updates |
 |-----|---------|
 | `/shopping-list-feed.rss` | Live — always reflects the current list |
-| `/shopping-list-feed-monday.rss` | Mondays at 6:01am |
-| `/shopping-list-feed-tuesday.rss` | Tuesdays at 6:00am |
-| `/shopping-list-feed-wednesday.rss` | Wednesdays at 6:00am |
-| `/shopping-list-feed-thursday.rss` | Thursdays at 6:00am |
-| `/shopping-list-feed-friday.rss` | Fridays at 6:00am |
-| `/shopping-list-feed-saturday.rss` | Saturdays at 6:00am |
-| `/shopping-list-feed-sunday.rss` | Sundays at 6:00am |
+| `/shopping-list-feed-monday.rss` | Mondays at 12:01am |
+| `/shopping-list-feed-tuesday.rss` | Tuesdays at 12:00am |
+| `/shopping-list-feed-wednesday.rss` | Wednesdays at 12:00am |
+| `/shopping-list-feed-thursday.rss` | Thursdays at 12:00am |
+| `/shopping-list-feed-friday.rss` | Fridays at 12:00am |
+| `/shopping-list-feed-saturday.rss` | Saturdays at 12:00am |
+| `/shopping-list-feed-sunday.rss` | Sundays at 12:00am |
 
-The weekly list regeneration runs at 12:00am on Monday, before Monday's feed updates.
+Times are in the site timezone. Monday's feed updates at 12:01am so the weekly list regeneration (12:00am) runs first. If a clock change shifts any scheduled event by an hour, the plugin moves it back on the next page load.
 
-Each day feed stores a snapshot with a fixed `pubDate` of "that day at 06:00:00" in the site timezone. The pubDate does not change between requests — only when the day's cron fires.
+Each day feed stores a snapshot with a fixed `pubDate` of "that day at 00:00:00" in the site timezone. The pubDate does not change between requests — only when the day's cron fires.
 
 ## Folder Structure
 
