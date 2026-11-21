@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.14.1] - 2026-11-21
+- The Social Media Posts panel now has a pair post for every two items in the list. It stopped at four pairs, so with a List Size above 8 the items after the eighth had no pair post.
+
 ## [0.14.0] - 2026-11-16
 - The weekly regeneration of the randomly selected items now runs at 12:00am on Monday in the site's timezone, instead of 6:00am UTC.
 - The day-specific RSS feeds now update at 12:00am on their day in the site's timezone (Monday at 12:01am, after regeneration), instead of 6:00am UTC. Their fixed `pubDate` is now 00:00:00 instead of 06:00:00.

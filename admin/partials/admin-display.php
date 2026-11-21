@@ -42,18 +42,14 @@ if (!empty($current_selection)) {
         'text'     => str_replace( '[items]', $formatted_items, $social_template_intro ),
     );
 
-    // Blocks 2-5 - pairs of items
-    for ($i = 1; $i <= 4; $i++) {
-        $start_index = ($i - 1) * 2;
-        $pair_items = array_slice($current_selection, $start_index, 2);
-        if (!empty($pair_items)) {
-            $formatted_pair = Shopping_List_Admin::format_items_for_social($pair_items);
-            $social_texts[$i] = array(
-                'template' => $social_template_pair,
-                'items'    => $formatted_pair,
-                'text'     => str_replace( '[items]', $formatted_pair, $social_template_pair ),
-            );
-        }
+    // One block per pair of items, however long the list is (the last holds one item when the count is odd).
+    foreach ( array_chunk( array_values( $current_selection ), 2 ) as $i => $pair_items ) {
+        $formatted_pair = Shopping_List_Admin::format_items_for_social($pair_items);
+        $social_texts[ $i + 1 ] = array(
+            'template' => $social_template_pair,
+            'items'    => $formatted_pair,
+            'text'     => str_replace( '[items]', $formatted_pair, $social_template_pair ),
+        );
     }
 }
 ?>
@@ -81,7 +77,7 @@ if (!empty($current_selection)) {
                         </div>
                         <textarea id="social-text-<?php echo absint( $index ); ?>" class="social-preview" data-items="<?php echo esc_attr( $block['items'] ); ?>" readonly><?php echo esc_textarea($block['text']); ?></textarea>
                         <div class="social-template-editor" hidden>
-                            <p class="template-hint">Use <code>[items]</code> where the current needed items should appear.<?php echo $is_pair ? ' This template is shared by all four "pair" posts above.' : ''; ?></p>
+                            <p class="template-hint">Use <code>[items]</code> where the current needed items should appear.<?php echo $is_pair ? ' This template is shared by all the "pair" posts above.' : ''; ?></p>
                             <textarea class="social-template-input" name="<?php echo esc_attr( $template_field ); ?>"><?php echo esc_textarea($block['template']); ?></textarea>
                             <button type="button" class="button reset-template" data-default="<?php echo esc_attr( $is_pair ? Shopping_List_Database::DEFAULT_SOCIAL_TEMPLATE_PAIR : Shopping_List_Database::DEFAULT_SOCIAL_TEMPLATE_INTRO ); ?>">Reset to default</button>
                         </div>
